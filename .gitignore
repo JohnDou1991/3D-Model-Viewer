@@ -1,0 +1,7 @@
+build/*
+bin/*
+
+!sources/*
+!bin/PROJECTX.exe
+!CMakeLists.txt
+!readme.md
