@@ -1,2 +1,2 @@
 # projectX
-Implement all that is in your mind
+Implement all that is in your mind.
