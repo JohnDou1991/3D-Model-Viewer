@@ -1,7 +1,5 @@
-build/*
-bin/*
-
-!sources/*
-!bin/PROJECTX.exe
-!CMakeLists.txt
-!readme.md
+/build/*
+/bin/*
+/CMakeFiles/*
+/.vscode/*
+/CMakeCache.txt
