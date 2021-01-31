@@ -3,3 +3,7 @@
 /CMakeFiles/*
 /.vscode/*
 /CMakeCache.txt
+/thirdparty/*
+!/thirdparty/glut
+/thirdparty/glut/*
+!/thirdparty/glut/CMakeLists.txt
