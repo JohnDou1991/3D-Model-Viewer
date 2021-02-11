@@ -3,7 +3,8 @@
     #define FREEGLUT_STATIC
     #include "GL/freeglut.h"
 #elif __linux__
-    #include "glut.h"
+    #include "GL/glut.h"
+    #include "GL/freeglut_ext.h"
 #endif
 
 using namespace std;
@@ -23,8 +24,8 @@ int main( int argc, char* argv[])
     glutCreateWindow( "PROJECTX" );
 
     glutDisplayFunc(display);
-    
-    glutSetOption ( GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION ) ;
+
+    glutSetOption( GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION );
     
     glutMainLoop();
     return 0;
