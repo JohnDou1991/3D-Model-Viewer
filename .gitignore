@@ -1,8 +1,8 @@
-/build/*
-/bin/*
-/glut/*
-/CMakeFiles/*
-/.vscode/*
-/CMakeCache.txt
-/thirdparty/*
+/*
+!/sources/
 !/thirdparty/CMakeLists.txt
+# !/thirdparty/
+# /thirdparty/*
+!/.gitignore
+!/CMakeLists.txt
+!/README.md
