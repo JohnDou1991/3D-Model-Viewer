@@ -1,11 +1,12 @@
+#define GLEW_STATIC
+
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
+
 #if defined(_WIN64) || defined(_WIN32)
-    #define GLUT_DISABLE_ATEXIT_HACK
-    #define FREEGLUT_STATIC
-    #define GLEW_STATIC
-    #include "GL/freeglut.h"
-#elif __linux__
-   #include "GL/glew.h"
-   #include "GLFW/glfw3.h"
+   #define GLUT_DISABLE_ATEXIT_HACK
+   #define FREEGLUT_STATIC
+   #include "GL/freeglut.h"
 #endif
 
 #include <iostream>
@@ -13,7 +14,6 @@
 #include <streambuf>
 #include <map>
 #include <string>
-
 
 using namespace std;
 
@@ -80,10 +80,12 @@ bool compileShader( Shader& shader )
 
 void loadShaders()
 {
-   shaderPool["vertex"] = std::move(readShader( "/home/yoctoadm/Desktop/Git/projectX/sources/shaders/vertex_shader", GL_VERTEX_SHADER ));
+   // shaderPool["vertex"] = std::move(readShader( "/home/yoctoadm/Desktop/Git/projectX/sources/shaders/vertex_shader", GL_VERTEX_SHADER ));
+   shaderPool["vertex"] = std::move(readShader( "C:/Users/OSennikov/Desktop/GitHub/projectX/projectX/sources/shaders/vertex_shader", GL_VERTEX_SHADER ));
    if ( !compileShader(shaderPool["vertex"]) ) return;
 
-   shaderPool["fragment"] = readShader( "/home/yoctoadm/Desktop/Git/projectX/sources/shaders/fragment_shader", GL_FRAGMENT_SHADER );
+   // shaderPool["fragment"] = readShader( "/home/yoctoadm/Desktop/Git/projectX/sources/shaders/fragment_shader", GL_FRAGMENT_SHADER );
+   shaderPool["fragment"] = readShader( "C:/Users/OSennikov/Desktop/GitHub/projectX/projectX/sources/shaders/fragment_shader", GL_FRAGMENT_SHADER );
    if ( !compileShader(shaderPool["fragment"]) ) return;
 
    shaderProgram = glCreateProgram();
