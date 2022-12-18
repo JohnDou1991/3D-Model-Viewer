@@ -15,6 +15,8 @@
 #include <map>
 #include <string>
 
+#include "utils/filesystem/app_utils.hpp"
+
 using namespace std;
 
 GLfloat vertices[] = {
@@ -80,12 +82,12 @@ bool compileShader( Shader& shader )
 
 void loadShaders()
 {
-   // shaderPool["vertex"] = std::move(readShader( "/home/yoctoadm/Desktop/Git/projectX/sources/shaders/vertex_shader", GL_VERTEX_SHADER ));
-   shaderPool["vertex"] = std::move(readShader( "C:/Users/OSennikov/Desktop/GitHub/projectX/projectX/sources/shaders/vertex_shader", GL_VERTEX_SHADER ));
+   std::string current_dir = utils::getCurrentDir();
+
+   shaderPool["vertex"] = std::move(readShader( (current_dir + "/resources/shaders/vertex_shader").c_str(), GL_VERTEX_SHADER ));
    if ( !compileShader(shaderPool["vertex"]) ) return;
 
-   // shaderPool["fragment"] = readShader( "/home/yoctoadm/Desktop/Git/projectX/sources/shaders/fragment_shader", GL_FRAGMENT_SHADER );
-   shaderPool["fragment"] = readShader( "C:/Users/OSennikov/Desktop/GitHub/projectX/projectX/sources/shaders/fragment_shader", GL_FRAGMENT_SHADER );
+   shaderPool["fragment"] = readShader( (current_dir + "/resources/shaders/fragment_shader").c_str(), GL_FRAGMENT_SHADER );
    if ( !compileShader(shaderPool["fragment"]) ) return;
 
    shaderProgram = glCreateProgram();
