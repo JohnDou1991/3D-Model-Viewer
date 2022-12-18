@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.12)
 
 set( C_DIR ${CMAKE_CURRENT_LIST_DIR} )
-set( SOURCES ${C_DIR}/main.cpp )
+
+set( SOURCES 
+    ${C_DIR}/main.cpp 
+    ${C_DIR}/utils/filesystem/app_utils.cpp
+    ${C_DIR}/utils/opengl/gl_utils.cpp 
+)
 
 if(UNIX)
     set( SOURCES ${SOURCES} ${C_DIR}/utils/filesystem/unix/app_utils.cpp )
@@ -18,7 +23,8 @@ target_include_directories( PROJECTX PUBLIC
     "${INSTALL_DIR}/glad/include" 
     "${INSTALL_DIR}/glew/include"
 
-    "${C_DIR}" 
+    "${C_DIR}"
+    "${C_DIR}/include" 
 )
 
 target_link_directories( PROJECTX PUBLIC 
