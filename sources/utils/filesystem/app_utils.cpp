@@ -2,8 +2,6 @@
 
 #include <fstream>
 
-#include "definitions.h"
-
 namespace utils
 {
     const std::string readFile( const std::string& path )

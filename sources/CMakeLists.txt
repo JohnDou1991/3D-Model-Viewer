@@ -4,8 +4,12 @@ set( C_DIR ${CMAKE_CURRENT_LIST_DIR} )
 
 set( SOURCES 
     ${C_DIR}/main.cpp 
+    ${C_DIR}/math/vector.cpp 
     ${C_DIR}/utils/filesystem/app_utils.cpp
+    ${C_DIR}/utils/objects/VertexObjectBase.cpp 
     ${C_DIR}/utils/opengl/gl_utils.cpp 
+    ${C_DIR}/utils/opengl/init.cpp 
+    ${C_DIR}/utils/opengl/program.cpp 
 )
 
 if(UNIX)

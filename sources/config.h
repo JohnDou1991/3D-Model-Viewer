@@ -1,1 +1,1 @@
-#define DEBUG_KEYBOARD false
+// #define DEBUG_KEYBOARD_EVENTS

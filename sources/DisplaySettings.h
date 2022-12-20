@@ -3,9 +3,10 @@
 namespace DisplaySettings
 {
     enum Mode{
+        SD,
         HD,
         FullHD
-    };
+    } CurrentMode = SD;
 
     struct Dimensions
     {
@@ -14,6 +15,7 @@ namespace DisplaySettings
     };
 
     const std::unordered_map<Mode,Dimensions> modes = {
+        { SD,       {800, 600}},
         { HD,       {1280, 720}},
         { FullHD,   {1920, 1080}}
     };

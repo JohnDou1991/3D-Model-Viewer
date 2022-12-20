@@ -1,15 +1,10 @@
 #pragma once
 
-#include "definitions.h"
-
-#include <string>
-#include <unordered_map>
-
-using Name = std::string;
+#include "utils/opengl/definitions.h"
 
 namespace utils
 {
-    Shader readShader( const std::string& path, GLenum type );
-    bool compileShader( Shader& shader );
-    GLuint loadShaders();
+    Shader ReadShader( const std::string& path, GLenum type );
+    bool CompileShader( Shader& shader );
+    GLuint LoadShaders( const ShaderList& );
 }

@@ -2,13 +2,13 @@
 #include "utils/filesystem/app_utils.hpp"
 
 #include <iostream>
+#include <vector>
 
 GLuint shaderProgram;
-std::unordered_map<Name,Shader> shaderPool;
 
 namespace utils
 {
-    Shader readShader( const std::string& path, GLenum type )
+    Shader ReadShader( const std::string& path, GLenum type )
     {
         Shader result;
         GLuint shader = glCreateShader(type);
@@ -17,7 +17,7 @@ namespace utils
         return result;
     }
 
-    bool compileShader( Shader& shader )
+    bool CompileShader( Shader& shader )
     {
         const GLchar* source = shader.file.c_str();
         glShaderSource(shader.shader, 1, &source, NULL);
@@ -36,27 +36,28 @@ namespace utils
         return success;
     }
 
-    GLuint loadShaders()
+    GLuint LoadShaders( const ShaderList& list )
     {
-        std::string current_dir = utils::getCurrentDir();
+        std::string dir = utils::getCurrentDir() + "/resources/shaders/";
+        std::vector<Shader> shaders;
 
-        shaderPool["vertex"] = std::move(readShader( (current_dir + "/resources/shaders/vertex_shader").c_str(), GL_VERTEX_SHADER ));
-        if ( !compileShader(shaderPool["vertex"]) ) return 0;
-
-        shaderPool["fragment"] = readShader( (current_dir + "/resources/shaders/fragment_shader").c_str(), GL_FRAGMENT_SHADER );
-        if ( !compileShader(shaderPool["fragment"]) ) return 0;
+        for ( const auto& pair : list )
+            for ( const auto& filename : pair.second )
+            {
+                shaders.emplace_back( ReadShader( (dir + filename).c_str(), pair.first ) );
+                CompileShader( shaders.back() );
+            }
 
         shaderProgram = glCreateProgram();
 
-        glAttachShader(shaderProgram, shaderPool["vertex"].shader);
-        glAttachShader(shaderProgram, shaderPool["fragment"].shader);
+        for ( auto& shader : shaders )
+            glAttachShader(shaderProgram, shader.shader);
+
         glLinkProgram(shaderProgram);
         glUseProgram(shaderProgram);
 
-        glDeleteShader(shaderPool["vertex"].shader);
-        glDeleteShader(shaderPool["fragment"].shader);
-
-        std::cout << "Shaders loaded..." << std::endl;
+        for ( auto& shader : shaders )
+            glDeleteShader(shader.shader);
 
         return shaderProgram;
     }
