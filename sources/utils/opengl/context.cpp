@@ -1,4 +1,4 @@
-#include "init.h"
+#include "context.h"
 
 #include "common.h"
 #include "config.h"
@@ -54,6 +54,13 @@ namespace utils::opengl
 
     void Context::KeyPressedCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
+        #ifdef DEBUG_KEYBOARD_EVENTS
+            std::cout << "key: " << key << " scancode: " << scancode << " action: " << action << " mods: " << mods << std::endl;
+        #endif
+
+        if ( action != GLFW_PRESS )
+            return;
+
         switch(key)
         {
             case GLFW_KEY_ESCAPE:
@@ -61,10 +68,17 @@ namespace utils::opengl
                 glfwSetWindowShouldClose(window,1);
                 break;
             }
+            case GLFW_KEY_F:
+            {
+                glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+                break;
+            }
+            case GLFW_KEY_L:
+            {
+                glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+                break;
+            }
             default:
-                #ifdef DEBUG_KEYBOARD_EVENTS
-                    std::cout << "key: " << key << " scancode: " << scancode << " action: " << action << " mods: " << mods << std::endl;
-                #endif
                 break;
         }
     }

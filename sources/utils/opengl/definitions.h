@@ -32,4 +32,16 @@ struct Vertices
     {
 
     }
-}; 
+};
+
+struct Indices
+{
+    unsigned size;
+    unsigned* indices;
+
+    template<typename T, unsigned size>
+    Indices( T(&indices)[size] ) : size(size*sizeof(T)), indices(indices)
+    {
+
+    }
+};

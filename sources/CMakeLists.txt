@@ -8,7 +8,7 @@ set( SOURCES
     ${C_DIR}/utils/filesystem/app_utils.cpp
     ${C_DIR}/utils/objects/VertexObjectBase.cpp 
     ${C_DIR}/utils/opengl/gl_utils.cpp 
-    ${C_DIR}/utils/opengl/init.cpp 
+    ${C_DIR}/utils/opengl/context.cpp 
     ${C_DIR}/utils/opengl/program.cpp 
 )
 

@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "utils/opengl/definitions.h"
+#include "utils/opengl/context.h"
 #include "utils/opengl/program.h"
 
 #include "utils/vertices.h"
@@ -10,21 +11,37 @@ int main(int argc, char** argv)
 {
    ShaderList shaders;
    shaders[ShaderType::VERTEX].push_back("vertex_shader");
-   shaders[ShaderType::FRAGMENT].push_back("fragment_shader");
+   shaders[ShaderType::FRAGMENT].push_back("fragment_shader_orange");
 
-   utils::opengl::Program program(vertices::rectangle1);
+   ShaderList shaders2;
+   shaders2[ShaderType::VERTEX].push_back("vertex_shader");
+   shaders2[ShaderType::FRAGMENT].push_back("fragment_shader_yellow");
 
-   program.LoadShaders(shaders);
-   program.InitBuffers();
+   utils::opengl::Context context;
 
-   while ( !glfwWindowShouldClose(program.context().Window()) )
    {
-      glClear(GL_COLOR_BUFFER_BIT);
+      utils::opengl::Program program(context);
+      utils::opengl::Program program2(context);
 
-      program.Draw();
+      program.LoadShaders(shaders);
+      program2.LoadShaders(shaders2);
 
-      glfwSwapBuffers(program.context().Window());
-      glfwPollEvents();
+      program.LoadObject(vertices::triangle1);
+      program.LoadObject(vertices::triangle2);
+      program2.LoadObject(vertices::triangle3);
+      program2.LoadObject(vertices::rectangle1);
+
+      program2.LoadObject( vertices::rectangle2, vertices::indices1 );
+
+      while ( !glfwWindowShouldClose(context.Window()) ) {
+         glClear(GL_COLOR_BUFFER_BIT);
+
+         program2.Draw();
+         program.Draw();
+
+         glfwSwapBuffers(context.Window());
+         glfwPollEvents();
+      };
    }
 
    glfwTerminate();
