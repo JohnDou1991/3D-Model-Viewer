@@ -3,6 +3,16 @@
 #include "common.h"
 #include "utils/opengl/definitions.h"
 
+namespace utils
+{
+    class Image;
+}
+
+namespace vertice
+{
+    class Object;
+}
+
 namespace utils::opengl
 {
     class Context;
@@ -27,6 +37,7 @@ namespace utils::opengl
         
         Context& m_context;
         GLuint   m_shader_program;
+        GLuint   m_texture;
 
         std::vector<Object> m_objects;
 
@@ -37,6 +48,11 @@ namespace utils::opengl
         void LoadShaders( const ShaderList& );
         void LoadObject( const Vertices& );
         void LoadObject( const Vertices&, const Indices& );
+
+        void LoadObject2( const Vertices& );
+        void LoadObject( const vertice::Object&, const Indices& );
+
+        void LoadTexture( const utils::Image& );
         
         void Draw();
     };

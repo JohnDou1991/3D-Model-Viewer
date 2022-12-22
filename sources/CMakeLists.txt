@@ -6,10 +6,14 @@ set( SOURCES
     ${C_DIR}/main.cpp 
     ${C_DIR}/math/vector.cpp 
     ${C_DIR}/utils/filesystem/app_utils.cpp
-    ${C_DIR}/utils/objects/VertexObjectBase.cpp 
+    ${C_DIR}/utils/vertices/position.cpp 
+    ${C_DIR}/utils/vertices/color.cpp 
+    ${C_DIR}/utils/vertices/texture.cpp 
+    ${C_DIR}/utils/vertices/object.cpp 
     ${C_DIR}/utils/opengl/gl_utils.cpp 
     ${C_DIR}/utils/opengl/context.cpp 
     ${C_DIR}/utils/opengl/program.cpp 
+    ${C_DIR}/utils/image_loader.cpp 
 )
 
 if(UNIX)
@@ -51,3 +55,8 @@ add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${C_DIR}/shaders
                 ${EXECUTABLE_OUTPUT_PATH}/resources/shaders )
+
+add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${C_DIR}/textures
+                ${EXECUTABLE_OUTPUT_PATH}/resources/textures )

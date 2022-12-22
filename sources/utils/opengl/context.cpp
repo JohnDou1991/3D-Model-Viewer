@@ -109,6 +109,11 @@ namespace utils::opengl
     Context::Context() : m_window(nullptr)
     {
         InitOpenGL();
+
+        int nrAttributes;
+        glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+        std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
+
     }
 
     GLFWwindow* Context::Window() const

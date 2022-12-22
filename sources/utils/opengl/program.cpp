@@ -2,8 +2,12 @@
 
 #include "utils/opengl/gl_utils.h"
 #include "utils/opengl/context.h"
+#include "utils/image_loader.h"
+
+#include "utils/vertices/object.h"
 
 #include <iostream>
+#include <cmath>
 
 namespace utils::opengl
 {
@@ -75,16 +79,92 @@ namespace utils::opengl
         glBindVertexArray(0);
     }
 
+    void Program::LoadObject2( const Vertices& vertices )
+    {
+        m_objects.push_back( { ObjectType::ARRAY, vertices.size / 3 } );
+        auto& object = m_objects.back();
+
+        glGenVertexArrays(1, &object.vao);
+        glBindVertexArray(object.vao);
+
+        glGenBuffers(1,&object.vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, object.vbo);
+
+        glBufferData(GL_ARRAY_BUFFER, vertices.size, vertices.vertices, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0 );
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3*sizeof(float)) );
+
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+
+        glBindVertexArray(0);
+    }
+
+    void Program::LoadObject( const vertice::Object& object, const Indices& indices )
+    {
+        m_objects.push_back( { ObjectType::ELEMENT, indices.size / 4 } );
+        auto& obj = m_objects.back();
+
+        glGenVertexArrays(1, &obj.vao);
+        glBindVertexArray(obj.vao);
+
+        glGenBuffers(1,&obj.vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, obj.vbo);
+
+        glGenBuffers(1,&obj.ebo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj.ebo);
+
+        std::vector<float> data;
+        size_t vertex_count = object.vertices.front()->length / object.vertices.front()->width;
+        for ( size_t i = 0; i < vertex_count; ++i )
+            for ( size_t j = 0; j < object.vertices.size(); ++j )
+                for ( unsigned k = 0 + object.vertices[j]->width * i, end = 0 + object.vertices[j]->width * (i+1); k < end; ++k )
+                    data.push_back( object.vertices[j]->data[k] );
+
+        glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size, indices.indices, GL_STATIC_DRAW );
+
+        unsigned offset = 0;
+        for ( size_t i = 0; i < object.vertices.size(); ++i )
+        {
+            auto& vertice = object.vertices[i];
+
+            glVertexAttribPointer(i, vertice->width, GL_FLOAT, GL_FALSE, object.block_size * sizeof(GLfloat), (GLvoid*)(offset*sizeof(GLfloat)));
+            glEnableVertexAttribArray(i);
+            offset += vertice->width;
+        }
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    void Program::LoadTexture( const utils::Image& image )
+    {
+        glGenTextures(1, &m_texture);
+        glBindTexture(GL_TEXTURE_2D, m_texture);
+
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.data );
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
     void Program::Draw()
     {
         glUseProgram(m_shader_program);
+
         for ( auto& object : m_objects )
         {
+            glBindTexture(GL_TEXTURE_2D, m_texture);
             glBindVertexArray(object.vao);
             switch(object.type)
             {
                 case ObjectType::ARRAY:
-                    glDrawArrays(GL_TRIANGLES, 0, object.size );
+                    glDrawArrays(GL_TRIANGLES, 0, 3 );
                     break;
                 case ObjectType::ELEMENT:
                     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
