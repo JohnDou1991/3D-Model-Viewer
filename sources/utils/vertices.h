@@ -38,10 +38,10 @@ namespace vertices
     };
 
     float rectangle2[] = {
-        0.5f,  0.5f, 0.0f, // top right
-        0.5f, -0.5f, 0.0f, // bottom right
-       -0.5f, -0.5f, 0.0f, // bottom left
-       -0.5f,  0.5f, 0.0f  // top left
+        0.75f,  0.75f, 0.0f, // top right
+        0.75f, -0.75f, 0.0f, // bottom right
+       -0.75f, -0.75f, 0.0f, // bottom left
+       -0.75f,  0.75f, 0.0f  // top left
     };
 
     unsigned indices1[] = { // note that we start from 0!

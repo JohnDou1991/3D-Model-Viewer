@@ -16,7 +16,5 @@ namespace vertice
     public:
         Object();
         void Add( Vertice* );
-
-        void GenBuffers();
     };
 }

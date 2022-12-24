@@ -78,6 +78,18 @@ namespace utils::opengl
                 glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
                 break;
             }
+            case GLFW_KEY_T:
+            {
+                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+                break;
+            }
+            case GLFW_KEY_R:
+            {
+                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+                break;
+            }
             default:
                 break;
         }
@@ -113,7 +125,6 @@ namespace utils::opengl
         int nrAttributes;
         glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
         std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
-
     }
 
     GLFWwindow* Context::Window() const

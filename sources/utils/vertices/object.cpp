@@ -12,10 +12,4 @@ namespace vertice
         block_size += v->width;
         vertices.emplace_back(v);
     }
-
-    void Object::GenBuffers()
-    {
-        // for ( auto& vertice : vertices )
-
-    }
 }
