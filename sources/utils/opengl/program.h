@@ -3,6 +3,8 @@
 #include "common.h"
 #include "utils/opengl/definitions.h"
 
+#include <functional>
+
 namespace utils
 {
     class Image;
@@ -12,6 +14,10 @@ namespace vertice
 {
     class Object;
 }
+
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
 
 namespace utils::opengl
 {
@@ -41,6 +47,11 @@ namespace utils::opengl
         std::vector<GLuint> m_textures;
         std::vector<Object> m_objects;
 
+        using Transformation = std::function<void(GLuint)>;
+        Transformation m_transformationFn;
+
+        std::vector<float> GetBufferData( const vertice::Object& ) const;
+
     public:
         Program( Context& );
         ~Program();
@@ -50,10 +61,15 @@ namespace utils::opengl
         void LoadObject( const Vertices&, const Indices& );
 
         void LoadObject2( const Vertices& );
+        void LoadObject( const vertice::Object& );
         void LoadObject( const vertice::Object&, const Indices& );
 
         void LoadTexture( const utils::Image& );
-        
+        void LoadTransformation( Transformation tFn )
+        {
+            m_transformationFn = tFn;
+        }
+
         void Draw();
     };
 }
