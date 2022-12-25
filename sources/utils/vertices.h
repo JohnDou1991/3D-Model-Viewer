@@ -62,4 +62,11 @@ namespace vertices
         0.0f, 1.0f, // top-center corner
         0.0f, 0.0f, // lower-left corner
     };
+
+    float texCoords2[] = {
+        0.75f, 0.25f, // lower-right corner
+        0.75f, 0.75f, // top-right
+        0.25f, 0.75f, // top-center corner
+        0.25f, 0.25f, // lower-left corner
+    };
 }

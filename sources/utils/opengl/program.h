@@ -37,8 +37,8 @@ namespace utils::opengl
         
         Context& m_context;
         GLuint   m_shader_program;
-        GLuint   m_texture;
 
+        std::vector<GLuint> m_textures;
         std::vector<Object> m_objects;
 
     public:

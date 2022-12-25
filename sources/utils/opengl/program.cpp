@@ -141,11 +141,12 @@ namespace utils::opengl
 
     void Program::LoadTexture( const utils::Image& image )
     {
-        glGenTextures(1, &m_texture);
-        glBindTexture(GL_TEXTURE_2D, m_texture);
+        m_textures.emplace_back(0);
+        glGenTextures(1, &m_textures.back());
+        glBindTexture(GL_TEXTURE_2D, m_textures.back());
 
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+        // glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+        // glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.data );
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -155,17 +156,29 @@ namespace utils::opengl
     {
         glUseProgram(m_shader_program);
 
+        std::vector<char*> textures = {"texture1", "texture2"};
+
+        for ( size_t i = 0; i < textures.size(); ++i )
+            glUniform1i(glGetUniformLocation(m_shader_program, textures[i]), i);
+
+        glUniform1f(glGetUniformLocation(m_shader_program, "alpha"), g_alpha );
+
         for ( auto& object : m_objects )
         {
-            glBindTexture(GL_TEXTURE_2D, m_texture);
+            for ( size_t i = 0; i < m_textures.size(); ++i ) 
+            {
+                glActiveTexture(GL_TEXTURE0+i);
+                glBindTexture(GL_TEXTURE_2D, m_textures[i]);
+            }
             glBindVertexArray(object.vao);
+
             switch(object.type)
             {
                 case ObjectType::ARRAY:
                     glDrawArrays(GL_TRIANGLES, 0, 3 );
                     break;
                 case ObjectType::ELEMENT:
-                    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+                    glDrawElements(GL_TRIANGLES, object.size, GL_UNSIGNED_INT, 0);
                     break;
                 default:
                     std::cout << "Unknown object type: " << object.type << std::endl;

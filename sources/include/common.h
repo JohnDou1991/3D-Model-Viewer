@@ -8,3 +8,5 @@
    #define FREEGLUT_STATIC
    #include "GL/freeglut.h"
 #endif
+
+extern float g_alpha;

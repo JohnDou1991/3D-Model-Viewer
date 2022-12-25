@@ -15,6 +15,8 @@
 
 #include "utils/vertices.h"
 
+#include "glm.hpp"
+
 /* Main function: GLUT runs as a console application starting at main()  */
 int main(int argc, char** argv)
 {
@@ -37,6 +39,9 @@ int main(int argc, char** argv)
       program.LoadShaders(shaders);
       program.LoadObject( obj, vertices::indices1 );
       program.LoadTexture( imageLoader.Load( utils::getCurrentDir() + "/resources/textures/texture1.jpg" ) );
+      // program.LoadTexture( imageLoader.Load( utils::getCurrentDir() + "/resources/textures/texture2.jpg" ) );
+
+      int frame = 0;
 
       while ( !glfwWindowShouldClose(context.Window()) ) {
          glClear(GL_COLOR_BUFFER_BIT);

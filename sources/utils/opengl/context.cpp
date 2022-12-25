@@ -3,8 +3,11 @@
 #include "common.h"
 #include "config.h"
 #include "DisplaySettings.h"
+#include "utils/std/clamp.h"
 
 #include <iostream>
+
+float g_alpha = 0.5f;
 
 namespace utils::opengl
 {
@@ -80,14 +83,24 @@ namespace utils::opengl
             }
             case GLFW_KEY_T:
             {
-                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST );
                 glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
                 break;
             }
             case GLFW_KEY_R:
             {
-                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
                 glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+                break;
+            }
+            case GLFW_KEY_UP:
+            {
+                g_alpha = std::clamp( 0.0, 1.0, g_alpha + 0.1 );
+                break;
+            }
+            case GLFW_KEY_DOWN:
+            {
+                g_alpha = std::clamp( 0.0, 1.0, g_alpha - 0.1 );
                 break;
             }
             default:
