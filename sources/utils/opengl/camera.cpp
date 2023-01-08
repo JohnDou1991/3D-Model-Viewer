@@ -24,6 +24,11 @@ namespace utils::opengl
 
     void Camera::Init()
     {
+        int width, height;
+        glfwGetWindowSize( m_context.Window(), &width, &height );
+        mousePos.lastX = width / 2;
+        mousePos.lastY = height / 2;
+
         utils::opengl::observer::Mouse::Instance( m_context.Window()).Subscribe(
             [this]( GLFWwindow* window, double x, double y )
             {

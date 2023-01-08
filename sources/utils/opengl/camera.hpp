@@ -25,8 +25,8 @@ namespace utils::opengl
 
         struct
         {
-            float lastX = 400;
-            float lastY = 300;
+            float lastX;
+            float lastY;
         } mousePos;
 
         struct

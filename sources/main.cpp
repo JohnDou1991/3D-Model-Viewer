@@ -53,7 +53,7 @@ int main(int argc, char** argv)
          program.LoadTransformation( [&context](GLuint program)
          {
             glm::mat4 model = glm::mat4(1);
-            model = glm::rotate(model, /*(float)glfwGetTime() +*/ glm::radians(45.0f), glm::vec3( 0.0, 10.0, 20.0 ));
+            model = glm::rotate(model, (float)glfwGetTime() / 3 + glm::radians(45.0f), glm::vec3( 0.0, 10.0, 20.0 ));
             glUniformMatrix4fv( glGetUniformLocation(program, "model"), 1, GL_FALSE, glm::value_ptr(model) );
 
             glm::mat4 view = glm::mat4(1);
