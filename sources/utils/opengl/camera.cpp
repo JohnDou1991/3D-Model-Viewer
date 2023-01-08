@@ -1,6 +1,9 @@
 #include "camera.hpp"
 
+#include "GLFW/glfw3.h"
+
 #include "utils/opengl/context.h"
+#include "utils/opengl/observers/keyboard.hpp"
 #include "utils/opengl/observers/mouse.hpp"
 
 #include "utils/std/clamp.h"
@@ -24,6 +27,9 @@ namespace utils::opengl
         utils::opengl::observer::Mouse::Instance( m_context.Window()).Subscribe(
             [this]( GLFWwindow* window, double x, double y )
             {
+                if ( m_context.Window() != window )
+                    return;
+
                 float offsetX = x - mousePos.lastX;
                 float offsetY = mousePos.lastY - y;
 
@@ -45,6 +51,16 @@ namespace utils::opengl
                 direction.z = sin(glm::radians(eAngles.yaw)) * cos(glm::radians(eAngles.pitch));
 
                 front = glm::normalize(direction);
+            }
+        );
+
+        utils::opengl::observer::Keyboard::Instance( m_context.Window()).Subscribe(
+            [this]( GLFWwindow* window, int key, int scancode, int action, int mods )
+            {
+                if ( m_context.Window() != window )
+                    return;
+
+                KeyPressedCallback( window, key, scancode, action, mods );
             }
         );
     }
@@ -82,6 +98,35 @@ namespace utils::opengl
             case RIGHT:
             {
                 position += m_cameraSpeed * glm::normalize( glm::cross( front, up ) );
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    void Camera::KeyPressedCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        switch ( key )
+        {
+            case GLFW_KEY_UP:
+            {
+                Move(Camera::EDirection::UP);
+                break;
+            }
+            case GLFW_KEY_DOWN:
+            {
+                Move(Camera::EDirection::DOWN);
+                break;
+            }
+            case GLFW_KEY_LEFT:
+            {
+                Move(Camera::EDirection::LEFT);
+                break;
+            }
+            case GLFW_KEY_RIGHT:
+            {
+                Move(Camera::EDirection::RIGHT);
                 break;
             }
             default:

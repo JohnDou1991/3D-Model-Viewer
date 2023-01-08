@@ -4,6 +4,8 @@
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
+class GLFWwindow;
+
 namespace utils::opengl
 {
     class Context;
@@ -19,7 +21,7 @@ namespace utils::opengl
 
         Context& m_context;
 
-        const float SPEED = 0.5f;
+        const float SPEED = 1.0f;
 
         struct
         {
@@ -33,13 +35,6 @@ namespace utils::opengl
             float pitch = 0;
         } eAngles;
 
-    public:
-        Camera( Context&, const glm::vec3& target = glm::vec3( 0,0,0 ) );
-
-        void Init();
-
-        glm::mat4 LookAt() const;
-
         enum EDirection {
             UP,
             DOWN,
@@ -47,6 +42,14 @@ namespace utils::opengl
             RIGHT
         };
 
+        void KeyPressedCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
         void Move(EDirection);
+
+    public:
+        Camera( Context&, const glm::vec3& target = glm::vec3( 0,0,0 ) );
+
+        void Init();
+
+        glm::mat4 LookAt() const;
     };
 }
