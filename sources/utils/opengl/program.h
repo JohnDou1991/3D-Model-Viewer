@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+
 #include "utils/opengl/definitions.h"
 
 #include <functional>
@@ -14,10 +15,6 @@ namespace vertice
 {
     class Object;
 }
-
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
 
 namespace utils::opengl
 {

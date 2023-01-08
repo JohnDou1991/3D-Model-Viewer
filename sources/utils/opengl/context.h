@@ -1,5 +1,7 @@
 #pragma once
 
+#include "utils/opengl/camera.hpp"
+
 class GLFWwindow;
 
 namespace utils::opengl
@@ -7,6 +9,10 @@ namespace utils::opengl
     class Context
     {
         GLFWwindow* m_window;
+        Camera m_camera;
+
+        float m_deltaTime = 0.0f;
+        float m_lastFrame = 0.0f;
 
         void InitOpenGLContext();
         GLFWwindow* InitOpenGLWindow();
@@ -15,10 +21,14 @@ namespace utils::opengl
 
         // Events
         static void FrameBufferSizeCallback(GLFWwindow*, int width, int height);
-        static void KeyPressedCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        void KeyPressedCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
     public:
         Context();
+
         GLFWwindow* Window() const;
+        const Camera& GetCamera() const;
+
+        float GetDeltaTime();
     };
 }

@@ -4,10 +4,11 @@
 #include "config.h"
 #include "DisplaySettings.h"
 #include "utils/std/clamp.h"
+#include "utils/opengl/camera.hpp"
+#include "utils/opengl/observers/keyboard.hpp"
+#include "utils/opengl/observers/mouse.hpp"
 
 #include <iostream>
-
-float g_alpha = 0.5f;
 
 namespace utils::opengl
 {
@@ -61,6 +62,32 @@ namespace utils::opengl
             std::cout << "key: " << key << " scancode: " << scancode << " action: " << action << " mods: " << mods << std::endl;
         #endif
 
+        switch ( key )
+        {
+            case GLFW_KEY_UP:
+            {
+                m_camera.Move(Camera::EDirection::UP);
+                break;
+            }
+            case GLFW_KEY_DOWN:
+            {
+                m_camera.Move(Camera::EDirection::DOWN);
+                break;
+            }
+            case GLFW_KEY_LEFT:
+            {
+                m_camera.Move(Camera::EDirection::LEFT);
+                break;
+            }
+            case GLFW_KEY_RIGHT:
+            {
+                m_camera.Move(Camera::EDirection::RIGHT);
+                break;
+            }
+            default:
+                break;
+        }
+
         if ( action != GLFW_PRESS )
             return;
 
@@ -104,14 +131,24 @@ namespace utils::opengl
         );
 
         glfwSetFramebufferSizeCallback( m_window, FrameBufferSizeCallback );
-        glfwSetKeyCallback( m_window, KeyPressedCallback );
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     }
 
-    Context::Context() : m_window(nullptr)
+    Context::Context() : m_window(nullptr), m_camera(*this), m_lastFrame(glfwGetTime())
     {
         InitOpenGL();
+        m_camera.Init();
+
+        utils::opengl::observer::Keyboard::Instance(m_window).Subscribe(
+            [this]( GLFWwindow* window, int key, int scancode, int action, int mods )
+            {
+                if ( m_window != window )
+                    return;
+                
+                KeyPressedCallback( window, key, scancode, action, mods );
+            }
+        );
 
         int nrAttributes;
         glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
@@ -123,5 +160,19 @@ namespace utils::opengl
     GLFWwindow* Context::Window() const
     {
         return m_window;
+    }
+
+    const Camera& Context::GetCamera() const
+    {
+        return m_camera;
+    }
+
+    float Context::GetDeltaTime()
+    {
+        float currentTime = glfwGetTime();
+        m_deltaTime = currentTime - m_lastFrame;
+        m_lastFrame = currentTime;
+
+        return m_deltaTime;
     }
 }

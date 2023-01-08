@@ -191,7 +191,7 @@ namespace utils::opengl
     {
         glUseProgram(m_shader_program);
 
-        std::vector<char*> textures = {"texture1", "texture2"};
+        std::vector<const char*> textures = {"texture1", "texture2"};
 
         for ( size_t i = 0; i < textures.size(); ++i )
             glUniform1i(glGetUniformLocation(m_shader_program, textures[i]), i);

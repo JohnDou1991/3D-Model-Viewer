@@ -4,6 +4,7 @@
 
 #include "utils/opengl/definitions.h"
 #include "utils/opengl/context.h"
+#include "utils/opengl/camera.hpp"
 #include "utils/opengl/program.h"
 
 #include "utils/image_loader.h"
@@ -24,32 +25,39 @@ int main(int argc, char** argv)
 
    utils::opengl::Context context;
 
-   utils::ImageLoader imageLoader;
-
    vertice::Object obj;
    obj.Add( new vertice::Position( vertices::cube1, 3 ));
-   // obj.Add( new vertice::Color( vertices::color1, 3 ));
    obj.Add( new vertice::Texture( vertices::cube1_tex_coords, 2 ));
+
+   auto print = []( const glm::mat4& matrix )
+   {
+      for ( int i = 0; i < 4; ++i )
+      {
+         for ( int j = 0; j < 4; ++j )
+            std::cout << matrix[i][j] << ' ';
+         std::cout << std::endl;
+      }
+      std::cout << std::endl;
+   };
 
    {
       utils::opengl::Program program(context);
-      // utils::opengl::Program program2(context);
 
       {
-         const auto& texture1 = imageLoader.Load( utils::getCurrentDir() + "/resources/textures/texture1.jpg" );
+         const auto& texture1 = utils::ImageLoader().Load( utils::getCurrentDir() + "/resources/textures/texture1.jpg" );
 
-         program.LoadShaders(shaders);
+         program.LoadShaders( shaders );
          program.LoadObject( obj );
          program.LoadTexture( texture1 );
 
-         program.LoadTransformation( [](GLuint program)
+         program.LoadTransformation( [&context](GLuint program)
          {
             glm::mat4 model = glm::mat4(1);
-            model = glm::rotate(model, (float)glfwGetTime() + glm::radians(0.0f), glm::vec3( 0.25, 1.0, 0.0 ));
+            model = glm::rotate(model, (float)glfwGetTime() + glm::radians(45.0f), glm::vec3( 0.0, 10.0, 20.0 ));
             glUniformMatrix4fv( glGetUniformLocation(program, "model"), 1, GL_FALSE, glm::value_ptr(model) );
 
             glm::mat4 view = glm::mat4(1);
-            view = glm::translate(view, glm::vec3( 0, 0, -5));
+            view = context.GetCamera().LookAt();
             glUniformMatrix4fv( glGetUniformLocation(program, "view"), 1, GL_FALSE, glm::value_ptr(view) );
 
             glm::mat4 projection = glm::mat4(1);
@@ -57,8 +65,6 @@ int main(int argc, char** argv)
             glUniformMatrix4fv( glGetUniformLocation(program, "projection"), 1, GL_FALSE, glm::value_ptr(projection) );
          });
       }
-
-      int frame = 0;
 
       while ( !glfwWindowShouldClose(context.Window()) ) {
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
