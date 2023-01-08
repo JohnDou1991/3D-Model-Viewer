@@ -8,7 +8,6 @@ namespace utils::opengl::observer
 {
     void Mouse::MouseMoveCallback( GLFWwindow* window, double xpos, double ypos )
     {
-        std::cout << "x: " << xpos << " y: " << ypos << std::endl;
         utils::opengl::observer::Mouse::Instance( window ).OnMouseMove( window, xpos, ypos );
     }
 
