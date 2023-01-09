@@ -51,9 +51,11 @@ namespace utils::opengl
 
     public:
         Program( Context& );
+        Program( Program&& );
         ~Program();
 
         void LoadShaders( const ShaderList& );
+
         void LoadObject( const Vertices& );
         void LoadObject( const Vertices&, const Indices& );
 
@@ -62,10 +64,7 @@ namespace utils::opengl
         void LoadObject( const vertice::Object&, const Indices& );
 
         void LoadTexture( const utils::Image& );
-        void LoadTransformation( Transformation tFn )
-        {
-            m_transformationFn = tFn;
-        }
+        void LoadTransformation( Transformation tFn );
 
         void Draw();
     };

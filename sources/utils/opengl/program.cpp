@@ -21,6 +21,16 @@ namespace utils::opengl
 
     }
 
+    Program::Program( Program&& rhs )
+        : m_context(rhs.m_context)
+        , m_shader_program( rhs.m_shader_program )
+        , m_textures( std::move(rhs.m_textures) )
+        , m_objects( std::move(rhs.m_objects) )
+        , m_transformationFn( rhs.m_transformationFn )
+    {
+        rhs.m_shader_program = 0;
+    }
+
     Program::~Program()
     {
         for ( auto& object : m_objects ) {
@@ -185,6 +195,11 @@ namespace utils::opengl
 
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.data );
         glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+    void Program::LoadTransformation( Program::Transformation tFn )
+    {
+        m_transformationFn = tFn;
     }
 
     void Program::Draw()
