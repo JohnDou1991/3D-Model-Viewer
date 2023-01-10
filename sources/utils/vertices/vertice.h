@@ -8,7 +8,8 @@ namespace vertice
     {
         POSITION,
         COLOR,
-        TEXTURE
+        TEXTURE,
+        NORMAL
     };
 
     class Vertice

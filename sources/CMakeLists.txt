@@ -5,10 +5,11 @@ set( C_DIR ${CMAKE_CURRENT_LIST_DIR} )
 set( SOURCES 
     ${C_DIR}/main.cpp 
     ${C_DIR}/utils/filesystem/app_utils.cpp
-    ${C_DIR}/utils/vertices/position.cpp 
     ${C_DIR}/utils/vertices/color.cpp 
+    ${C_DIR}/utils/vertices/normal.cpp 
+    ${C_DIR}/utils/vertices/object.cpp
+    ${C_DIR}/utils/vertices/position.cpp 
     ${C_DIR}/utils/vertices/texture.cpp 
-    ${C_DIR}/utils/vertices/object.cpp 
     ${C_DIR}/utils/opengl/gl_utils.cpp 
     ${C_DIR}/utils/opengl/camera.cpp 
     ${C_DIR}/utils/opengl/context.cpp 

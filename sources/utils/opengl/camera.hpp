@@ -51,5 +51,6 @@ namespace utils::opengl
         void Init();
 
         glm::mat4 LookAt() const;
+        const glm::vec3& Position() const;
     };
 }

@@ -79,6 +79,11 @@ namespace utils::opengl
         );
     }
 
+    const glm::vec3& Camera::Position() const
+    {
+        return position;
+    }
+
     void Camera::Move( EDirection direction )
     {
         float m_cameraSpeed = SPEED * m_context.GetDeltaTime();
