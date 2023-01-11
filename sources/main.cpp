@@ -36,7 +36,8 @@ int main(int argc, char** argv)
    obj.Add( new vertice::Normal( vertices::cube1_normals, 3 ));
    obj.Add( new vertice::Texture( vertices::cube1_tex_coords, 2 ));
 
-   utils::Image texture = utils::ImageLoader().Load( utils::getCurrentDir() + "/resources/textures/texture1.jpg" );
+   utils::Image texture = utils::ImageLoader().Load( utils::getCurrentDir() + "/resources/textures/container2.png" );
+   utils::Image texture2 = utils::ImageLoader().Load( utils::getCurrentDir() + "/resources/textures/container2_specular.png" );
 
    {
       std::vector<utils::opengl::Program> programs;
@@ -51,7 +52,6 @@ int main(int argc, char** argv)
 
          program.LoadShaders( shaders );
          program.LoadObject( obj );
-         program.LoadTexture( texture );
 
          return program;
       };
@@ -62,6 +62,8 @@ int main(int argc, char** argv)
       // object 1
       {
          auto& program = addObject( shadersObject, obj, texture );
+         program.LoadTexture( texture );
+         program.LoadTexture( texture2 );
 
          program.LoadTransformation( [&lightPosition, &context](GLuint program)
          {
@@ -77,10 +79,20 @@ int main(int argc, char** argv)
             projection = glm::perspective( glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f );
             glUniformMatrix4fv( glGetUniformLocation(program, "projection"), 1, GL_FALSE, glm::value_ptr(projection) );
 
-            glUniform3fv( glGetUniformLocation(program, "objectColor"), 1, glm::value_ptr( glm::vec3( 1.0, 0.5, 0.31 )) );
-            glUniform3fv( glGetUniformLocation(program, "lightColor"), 1, glm::value_ptr( glm::vec3( 1.0, 1.0, 1.0 )) );
+            glUniform3fv( glGetUniformLocation(program, "material.ambient"), 1, glm::value_ptr( glm::vec3( 1.0, 0.5, 0.31 )) );
+            glUniform3fv( glGetUniformLocation(program, "material.diffuse"), 1, glm::value_ptr( glm::vec3( 1.0, 0.5, 0.31 )) );
+            glUniform3fv( glGetUniformLocation(program, "material.specular"), 1, glm::value_ptr( glm::vec3( 0.5, 0.5, 0.5 )) );
+            glUniform1f( glGetUniformLocation(program, "material.shininess"), 64.0 );
 
-            glUniform3fv( glGetUniformLocation(program, "lightPos"), 1, glm::value_ptr( lightPosition ) );
+            glm::vec3 lightColor(1,1,1);
+            glm::vec3 diffuseColor = glm::vec3(0.5, 0.5, 0.5);
+            glm::vec3 ambientColor = glm::vec3(0.2, 0.2, 0.2);
+
+            glUniform3fv( glGetUniformLocation(program, "light.position"), 1, glm::value_ptr( lightPosition ) );
+            glUniform3fv( glGetUniformLocation(program, "light.ambient"), 1, glm::value_ptr( ambientColor ) );
+            glUniform3fv( glGetUniformLocation(program, "light.diffuse"), 1, glm::value_ptr( diffuseColor ) );
+            glUniform3fv( glGetUniformLocation(program, "light.specular"), 1, glm::value_ptr( glm::vec3( 1.0, 1.0, 1.0 )) );
+
             glUniform3fv( glGetUniformLocation(program, "viewPos"), 1, glm::value_ptr( context.GetCamera().Position() ) );
          });
       }

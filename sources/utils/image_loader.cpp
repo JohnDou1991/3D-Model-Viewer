@@ -1,5 +1,7 @@
 #include "image_loader.h"
 
+#include "glad/glad.h"
+
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -10,6 +12,21 @@ namespace utils
     Image::Image( const std::string& path ) : data(nullptr)
     {
         data = stbi_load( path.c_str(), &width, &height, &nrChannels, 0);
+        switch ( nrChannels )
+        {
+            case 1:
+                format = GL_RED;
+                break;
+            case 3:
+                format = GL_RGB;
+                break;
+            case 4:
+                format = GL_RGBA;
+                break;
+            default:
+                format = -1;
+                break;
+        }
     }
 
     Image::~Image()

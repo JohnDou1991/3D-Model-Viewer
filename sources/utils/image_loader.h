@@ -12,6 +12,7 @@ namespace utils
         int width;
         int height;
         int nrChannels;
+        int format;
 
         unsigned char *data;
     };
