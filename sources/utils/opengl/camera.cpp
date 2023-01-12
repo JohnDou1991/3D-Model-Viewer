@@ -11,7 +11,7 @@
 namespace utils::opengl
 {
     Camera::Camera( Context& context, const glm::vec3& target )
-        : position( 0, 0, 3 )
+        : position( 0, 0, 8 )
         , target(target)
         , direction( glm::normalize( position - target ) )
         , right( glm::normalize( glm::cross(glm::vec3(0,1,0), direction) ))
@@ -24,10 +24,8 @@ namespace utils::opengl
 
     void Camera::Init()
     {
-        int width, height;
-        glfwGetWindowSize( m_context.Window(), &width, &height );
-        mousePos.lastX = width / 2;
-        mousePos.lastY = height / 2;
+        mousePos.lastX = m_context.WindowWidth() / 2;
+        mousePos.lastY = m_context.WindowHeight() / 2;
 
         utils::opengl::observer::Mouse::Instance( m_context.Window()).Subscribe(
             [this]( GLFWwindow* window, double x, double y )
@@ -84,6 +82,11 @@ namespace utils::opengl
         return position;
     }
 
+    const glm::vec3& Camera::Front() const
+    {
+        return front;
+    }
+
     void Camera::Move( EDirection direction )
     {
         float m_cameraSpeed = SPEED * m_context.GetDeltaTime();
@@ -117,6 +120,9 @@ namespace utils::opengl
 
     void Camera::KeyPressedCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
+        if ( action == GLFW_RELEASE )
+            return;
+
         switch ( key )
         {
             case GLFW_KEY_UP:

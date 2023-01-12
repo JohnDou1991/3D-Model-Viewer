@@ -7,6 +7,7 @@ namespace utils
     struct Image
     {
         Image( const std::string& );
+        Image( Image&& );
         ~Image();
 
         int width;

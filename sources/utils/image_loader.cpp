@@ -29,6 +29,16 @@ namespace utils
         }
     }
 
+    Image::Image( Image&& rhs )
+        : width(rhs.width)
+        , height(rhs.height)
+        , nrChannels(rhs.nrChannels)
+        , format(rhs.format)
+    {
+        data = rhs.data;
+        rhs.data = nullptr;
+    }
+
     Image::~Image()
     {
         if (data)

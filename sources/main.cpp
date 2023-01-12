@@ -9,7 +9,6 @@
 
 #include "utils/image_loader.h"
 
-
 #include "utils/vertices/color.h"
 #include "utils/vertices/normal.h"
 #include "utils/vertices/object.h"
@@ -17,6 +16,10 @@
 #include "utils/vertices/texture.h"
 
 #include "utils/vertices.h"
+
+#include "objects/light/directional.hpp"
+#include "objects/light/point.hpp"
+#include "objects/light/spot.hpp"
 
 /* Main function: GLUT runs as a console application starting at main()  */
 int main(int argc, char** argv)
@@ -36,8 +39,46 @@ int main(int argc, char** argv)
    obj.Add( new vertice::Normal( vertices::cube1_normals, 3 ));
    obj.Add( new vertice::Texture( vertices::cube1_tex_coords, 2 ));
 
-   utils::Image texture = utils::ImageLoader().Load( utils::getCurrentDir() + "/resources/textures/container2.png" );
-   utils::Image texture2 = utils::ImageLoader().Load( utils::getCurrentDir() + "/resources/textures/container2_specular.png" );
+   using Textures = std::vector<utils::Image>;
+
+   Textures textures;
+   textures.emplace_back( utils::ImageLoader().Load( utils::getCurrentDir() + "/resources/textures/container2.png" ) );
+   textures.emplace_back( utils::ImageLoader().Load( utils::getCurrentDir() + "/resources/textures/container2_specular.png" ) );
+
+   using LightSources = std::vector<std::unique_ptr<object::light::Light>>;
+   
+   const object::light::Light::Color color{
+      glm::vec3(0.1, 0.1, 0.1), // ambient
+      glm::vec3(0.5, 0.5, 0.5), // diffuse
+      glm::vec3(1.0, 1.0, 1.0)  // specular
+   };
+   // const object::light::Light::Attenuation attenuation{ 1.0f, 0.09f, 0.032f };
+   // const object::light::Light::Attenuation attenuation{ 1.0f, 0.35f, 0.44f };
+   const object::light::Light::Attenuation attenuation{ 1.0f, 0.7f, 1.8f };
+
+   struct LightSource {
+      LightSource( glm::vec3 position ) 
+         : current_position(position)
+         , origin_position(position)
+      {
+
+      }
+      glm::vec3 current_position;
+      const glm::vec3 origin_position;
+   };
+
+   std::vector<LightSource> sources;
+   sources.emplace_back( glm::vec3(1,1,1) );
+   sources.emplace_back( glm::vec3(1,2,1) );
+   sources.emplace_back( glm::vec3(1,3,1) );
+   sources.emplace_back( glm::vec3(1,4,1) );
+
+   LightSources lights;
+   lights.emplace_back( new object::light::Directional(color, attenuation, glm::vec3(3)) );
+   lights.emplace_back( new object::light::Spot(color, attenuation, context.GetCamera().Position(), context.GetCamera().Front(), 12.5f, 17.5f) );
+
+   for ( auto& source : sources )
+      lights.emplace_back( new object::light::Point(color, attenuation, source.current_position) );
 
    {
       std::vector<utils::opengl::Program> programs;
@@ -45,7 +86,7 @@ int main(int argc, char** argv)
       auto addObject = [&programs, &context]( 
          const ShaderList& shaders
        , const vertice::Object& obj
-       , const utils::Image& texture ) -> utils::opengl::Program&
+       , const Textures& textures ) -> utils::opengl::Program&
       {
          programs.emplace_back(context);
          utils::opengl::Program& program = programs.back();
@@ -53,74 +94,78 @@ int main(int argc, char** argv)
          program.LoadShaders( shaders );
          program.LoadObject( obj );
 
+         for ( auto& texture : textures )
+            program.LoadTexture( texture );
+
          return program;
       };
 
-      glm::vec3 lightPosition( 1, 1, -2 );
-      const glm::vec3 c_lPos = lightPosition;
+      auto sceneTransformation = [&lights, &context](GLuint program)
+      {
+         // camera position
+         glm::mat4 view = glm::mat4(1);
+         view = context.GetCamera().LookAt();
+         glUniformMatrix4fv( glGetUniformLocation(program, "view"), 1, GL_FALSE, glm::value_ptr(view) );
+
+         // projection
+         glm::mat4 projection = glm::mat4(1);
+         projection = glm::perspective( glm::radians(context.FieldOfView()), context.AspectRatio(), 0.1f, 100.0f );
+         glUniformMatrix4fv( glGetUniformLocation(program, "projection"), 1, GL_FALSE, glm::value_ptr(projection) );
+
+         for ( auto& light : lights )
+            light->Process(program);
+
+         glUniform3fv( glGetUniformLocation(program, "viewPos"), 1, glm::value_ptr( context.GetCamera().Position() ) );
+      };
 
       // object 1
       {
-         auto& program = addObject( shadersObject, obj, texture );
-         program.LoadTexture( texture );
-         program.LoadTexture( texture2 );
-
-         program.LoadTransformation( [&lightPosition, &context](GLuint program)
+         for ( int i = 0; i < 10; ++i ) 
          {
-            glm::mat4 model = glm::mat4(1);
-            model = glm::rotate(model, (float)glfwGetTime()/10 + glm::radians(45.0f), glm::vec3( 0.0, 10.0, 20.0 ));
-            glUniformMatrix4fv( glGetUniformLocation(program, "model"), 1, GL_FALSE, glm::value_ptr(model) );
+            auto& program = addObject( shadersObject, obj, textures );
 
-            glm::mat4 view = glm::mat4(1);
-            view = context.GetCamera().LookAt();
-            glUniformMatrix4fv( glGetUniformLocation(program, "view"), 1, GL_FALSE, glm::value_ptr(view) );
+            glm::vec3 position( (rand() - RAND_MAX/2) % 4, (rand() - RAND_MAX/2) % 4, (rand() - RAND_MAX/2) % 4 );
 
-            glm::mat4 projection = glm::mat4(1);
-            projection = glm::perspective( glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f );
-            glUniformMatrix4fv( glGetUniformLocation(program, "projection"), 1, GL_FALSE, glm::value_ptr(projection) );
+            program.LoadTransformation( [&sceneTransformation, position](GLuint program)
+            {
+               glm::mat4 model = glm::mat4(1);
+               // model = glm::rotate(model, (float)glfwGetTime()/2 + glm::radians(45.0f), glm::vec3( 0.0, 0.0, 20.0 ));
+               model = glm::translate( model, position );
+               glUniformMatrix4fv( glGetUniformLocation(program, "model"), 1, GL_FALSE, glm::value_ptr(model) );
 
-            glUniform3fv( glGetUniformLocation(program, "material.ambient"), 1, glm::value_ptr( glm::vec3( 1.0, 0.5, 0.31 )) );
-            glUniform3fv( glGetUniformLocation(program, "material.diffuse"), 1, glm::value_ptr( glm::vec3( 1.0, 0.5, 0.31 )) );
-            glUniform3fv( glGetUniformLocation(program, "material.specular"), 1, glm::value_ptr( glm::vec3( 0.5, 0.5, 0.5 )) );
-            glUniform1f( glGetUniformLocation(program, "material.shininess"), 64.0 );
+               glUniform3fv( glGetUniformLocation(program, "material.color.ambient"), 1, glm::value_ptr( glm::vec3( 1.0, 0.5, 0.31 )) );
+               glUniform3fv( glGetUniformLocation(program, "material.color.diffuse"), 1, glm::value_ptr( glm::vec3( 1.0, 0.5, 0.31 )) );
+               glUniform3fv( glGetUniformLocation(program, "material.color.specular"), 1, glm::value_ptr( glm::vec3( 0.5, 0.5, 0.5 )) );
 
-            glm::vec3 lightColor(1,1,1);
-            glm::vec3 diffuseColor = glm::vec3(0.5, 0.5, 0.5);
-            glm::vec3 ambientColor = glm::vec3(0.2, 0.2, 0.2);
+               glUniform1f( glGetUniformLocation(program, "material.shininess"), 64.0 );
 
-            glUniform3fv( glGetUniformLocation(program, "light.position"), 1, glm::value_ptr( lightPosition ) );
-            glUniform3fv( glGetUniformLocation(program, "light.ambient"), 1, glm::value_ptr( ambientColor ) );
-            glUniform3fv( glGetUniformLocation(program, "light.diffuse"), 1, glm::value_ptr( diffuseColor ) );
-            glUniform3fv( glGetUniformLocation(program, "light.specular"), 1, glm::value_ptr( glm::vec3( 1.0, 1.0, 1.0 )) );
-
-            glUniform3fv( glGetUniformLocation(program, "viewPos"), 1, glm::value_ptr( context.GetCamera().Position() ) );
-         });
+               sceneTransformation(program);
+            });
+         }
       }
 
       // object 2 ( light source )
       {
-         auto& program = addObject( shadersLight, obj, texture );
-
-         program.LoadTransformation( [&lightPosition, c_lPos, &context](GLuint program)
+         for ( auto& source : sources )
          {
-            glm::mat4 model = glm::mat4(1);
-            model = glm::rotate(model, -(float)glfwGetTime() + glm::radians(0.0f), glm::vec3( 5.0, 80.0, 40.0 ));
-            model = glm::translate( model, c_lPos );
+            auto& program = addObject( shadersLight, obj, {} );
 
-            lightPosition = model * glm::vec4(c_lPos, 0.0);
+            program.LoadTransformation( [&source, &sceneTransformation, &context](GLuint program)
+            {
+               glm::mat4 model = glm::mat4(1);
+               model = glm::rotate(model, -(float)glfwGetTime()/2 + glm::radians(0.0f), glm::vec3( 5.0, 80.0, 40.0 ));
+               glm::vec3 pos = source.origin_position;
+               model = glm::translate( model, pos += sin(glfwGetTime()) );
 
-            model = glm::scale(model, glm::vec3(0.2));
+               source.current_position = model * glm::vec4(pos, 0.0);
 
-            glUniformMatrix4fv( glGetUniformLocation(program, "model"), 1, GL_FALSE, glm::value_ptr(model) );
+               model = glm::scale(model, glm::vec3(0.2));
 
-            glm::mat4 view = glm::mat4(1);
-            view = context.GetCamera().LookAt();
-            glUniformMatrix4fv( glGetUniformLocation(program, "view"), 1, GL_FALSE, glm::value_ptr(view) );
+               glUniformMatrix4fv( glGetUniformLocation(program, "model"), 1, GL_FALSE, glm::value_ptr(model) );
 
-            glm::mat4 projection = glm::mat4(1);
-            projection = glm::perspective( glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f );
-            glUniformMatrix4fv( glGetUniformLocation(program, "projection"), 1, GL_FALSE, glm::value_ptr(projection) );
-         });
+               sceneTransformation(program);
+            });
+         }
       }
 
       while ( !glfwWindowShouldClose(context.Window()) ) {

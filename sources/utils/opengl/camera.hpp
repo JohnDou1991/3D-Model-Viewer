@@ -52,5 +52,6 @@ namespace utils::opengl
 
         glm::mat4 LookAt() const;
         const glm::vec3& Position() const;
+        const glm::vec3& Front() const;
     };
 }

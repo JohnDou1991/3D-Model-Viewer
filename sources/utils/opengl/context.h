@@ -29,6 +29,11 @@ namespace utils::opengl
         GLFWwindow* Window() const;
         const Camera& GetCamera() const;
 
+        int WindowHeight() const;
+        int WindowWidth() const;
+        float AspectRatio() const;
+        float FieldOfView() const;
+
         float GetDeltaTime();
     };
 }

@@ -139,6 +139,32 @@ namespace utils::opengl
         return m_camera;
     }
 
+    int Context::WindowHeight() const
+    {
+        int width, height;
+        glfwGetWindowSize( m_window, &width, &height );
+        return height;
+    }
+
+    int Context::WindowWidth() const
+    {
+        int width, height;
+        glfwGetWindowSize( m_window, &width, &height );
+        return width;
+    }
+
+    float Context::AspectRatio() const
+    {
+        int width, height;
+        glfwGetWindowSize( m_window, &width, &height );
+        return width/(float)height;
+    }
+
+    float Context::FieldOfView() const
+    {
+        return 45.0f;
+    }
+
     float Context::GetDeltaTime()
     {
         float currentTime = glfwGetTime();
