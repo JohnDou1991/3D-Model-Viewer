@@ -21,9 +21,13 @@
 #include "objects/light/point.hpp"
 #include "objects/light/spot.hpp"
 
+#include "assimp/Bitmap.h"
+
 /* Main function: GLUT runs as a console application starting at main()  */
 int main(int argc, char** argv)
 {
+   Assimp::Bitmap::Save(nullptr,nullptr);
+
    utils::opengl::Context context;
 
    ShaderList shadersObject;

@@ -1,9 +1,6 @@
 /*
 !/sources/
 !/thirdparty/
-/thirdparty/*
-!/thirdparty/cmake/
-!/thirdparty/CMakeLists.txt
 !/.gitignore
 !/CMakeLists.txt
 !/README.md
