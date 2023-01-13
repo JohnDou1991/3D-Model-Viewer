@@ -1,6 +1,9 @@
 #pragma once
 
+#include "glad/glad.h"
 #include "glm.hpp"
+
+#include <string>
 
 namespace object::light
 {
@@ -23,37 +26,16 @@ namespace object::light
         const Color color;
         const Attenuation attenuation;
 
-        Light( const Color& color, const Attenuation& attenuation ) : color(color), attenuation(attenuation)
-        {
+        std::string uniformName;
 
-        }
+        Light( const Color& color, const Attenuation& attenuation );
 
     public:
-        virtual ~Light()
-        {
+        virtual ~Light();
 
-        }
+        const Color& GetColor() const;
+        const Attenuation& GetAttenuation() const;
 
-        const Color& GetColor() const
-        {
-            return color;
-        }
-
-        const Attenuation& GetAttenuation() const
-        {
-            return attenuation;
-        }
-
-        virtual void Process( GLuint program ) const
-        {
-            // TODO
-            // glUniform3fv( glGetUniformLocation(program, "light.ambient"), 1, glm::value_ptr( color.ambient ) );
-            // glUniform3fv( glGetUniformLocation(program, "light.diffuse"), 1, glm::value_ptr( color.diffuse ) );
-            // glUniform3fv( glGetUniformLocation(program, "light.specular"), 1, glm::value_ptr( color.specular ) );
-
-            // glUniform1f( glGetUniformLocation(program, "light.constant"), attenuation.constant );
-            // glUniform1f( glGetUniformLocation(program, "light.linear"), attenuation.linear );
-            // glUniform1f( glGetUniformLocation(program, "light.quadratic"), attenuation.quadratic );
-        }
+        virtual void Process( GLuint program ) const = 0;
     };
 };

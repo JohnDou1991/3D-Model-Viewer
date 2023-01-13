@@ -5,6 +5,12 @@ set( C_DIR ${CMAKE_CURRENT_LIST_DIR} )
 set( SOURCES 
     ${C_DIR}/main.cpp 
     ${C_DIR}/utils/filesystem/app_utils.cpp
+    ${C_DIR}/objects/light/directional.cpp
+    ${C_DIR}/objects/light/light.cpp
+    ${C_DIR}/objects/light/point.cpp
+    ${C_DIR}/objects/light/spot.cpp
+    ${C_DIR}/objects/mesh.cpp
+    ${C_DIR}/objects/model.cpp
     ${C_DIR}/utils/vertices/color.cpp 
     ${C_DIR}/utils/vertices/normal.cpp 
     ${C_DIR}/utils/vertices/object.cpp
@@ -66,3 +72,8 @@ add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${C_DIR}/textures
                 ${EXECUTABLE_OUTPUT_PATH}/resources/textures )
+
+add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${C_DIR}/models
+                ${EXECUTABLE_OUTPUT_PATH}/resources/models )

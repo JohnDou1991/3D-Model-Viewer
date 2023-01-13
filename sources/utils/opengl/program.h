@@ -3,6 +3,7 @@
 #include "common.h"
 
 #include "utils/opengl/definitions.h"
+#include "objects/model.hpp"
 
 #include <functional>
 
@@ -49,6 +50,8 @@ namespace utils::opengl
 
         std::vector<float> GetBufferData( const vertice::Object& ) const;
 
+        std::vector<object::Model> m_models;
+
     public:
         Program( Context& );
         Program( Program&& );
@@ -66,6 +69,9 @@ namespace utils::opengl
         void LoadTexture( const utils::Image& );
         void LoadTransformation( Transformation tFn );
 
+        void LoadModel( const std::string& path );
+
         void Draw();
+        void Draw2();
     };
 }

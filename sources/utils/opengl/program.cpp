@@ -202,14 +202,19 @@ namespace utils::opengl
         m_transformationFn = tFn;
     }
 
+    void Program::LoadModel( const std::string& path )
+    {
+        m_models.emplace_back( path );
+    }
+
     void Program::Draw()
     {
         glUseProgram(m_shader_program);
 
-        std::vector<const char*> textures = {"texture1", "texture2", "texture3"};
+        // std::vector<const char*> textures = {"texture1", "texture2", "texture3"};
 
-        for ( size_t i = 0; i < textures.size(); ++i )
-            glUniform1i(glGetUniformLocation(m_shader_program, textures[i]), i);
+        // for ( size_t i = 0; i < textures.size(); ++i )
+            // glUniform1i(glGetUniformLocation(m_shader_program, textures[i]), i);
 
         m_transformationFn(m_shader_program);
 
@@ -236,5 +241,13 @@ namespace utils::opengl
             }
             glBindVertexArray(0);
         }
+    }
+
+    void Program::Draw2()
+    {
+        glUseProgram(m_shader_program);
+        m_transformationFn(m_shader_program);
+        for ( auto& model : m_models )
+            model.Draw( m_shader_program );
     }
 }

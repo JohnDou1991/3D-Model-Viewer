@@ -8,8 +8,11 @@ out vec4 FragColor;
 
 uniform vec3 viewPos;
 
-uniform sampler2D texture1;
-uniform sampler2D texture2;
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
+uniform sampler2D texture_diffuse3;
+uniform sampler2D texture_specular1;
+uniform sampler2D texture_specular2;
 
 struct Color {
     vec3 ambient;
@@ -55,18 +58,18 @@ struct PointLight {
     Attenuation attenuation;
 };
 uniform PointLight pLights[MAX_LIGHT_SOURCES];
-uniform int pLightsCount = 4;
+uniform int pLightsCount = 1;
 
 vec3 AmbientLight(vec3 ambient)
 {
-    vec3 result = ambient * vec3(texture(texture1, TexCoord));
+    vec3 result = ambient * vec3(texture(texture_diffuse1, TexCoord));
     return result;
 }
 
 vec3 DiffuseLight( vec3 lightDir, Color color )
 {
     float diff = max( dot(normalize(Normal), lightDir), 0.0 );
-    vec3 diffuse = color.diffuse * (diff * vec3(texture(texture1, TexCoord)));
+    vec3 diffuse = color.diffuse * (diff * vec3(texture(texture_diffuse1, TexCoord)));
 
     return diffuse;
 }
@@ -77,7 +80,7 @@ vec3 SpecularLight( vec3 lightDir, Color color )
     vec3 reflectDir = reflect( -lightDir, normalize(Normal) );
 
     float spec = pow(max(dot(viewDir,reflectDir), 0.0), material.shininess);
-    vec3 specular = sLight.color.specular * ( spec * vec3(texture(texture2, TexCoord)) );
+    vec3 specular = sLight.color.specular * ( spec * vec3(texture(texture_specular1, TexCoord)) );
 
     return specular;
 }
@@ -158,4 +161,6 @@ void main()
     for ( int i = 0; i < pLightsCount && i < MAX_LIGHT_SOURCES; ++i )
         result += PLight(i);
     FragColor = vec4( result, 1.0 );
+    // FragColor = texture(texture_diffuse1,TexCoord);
+    // FragColor = vec4(1.0);
 }
