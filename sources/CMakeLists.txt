@@ -25,7 +25,9 @@ set( SOURCES
     ${C_DIR}/utils/image_loader.cpp 
 )
 
-if(UNIX)
+if(APPLE)
+    set( SOURCES ${SOURCES} ${C_DIR}/utils/filesystem/mac/app_utils.cpp )
+elseif(UNIX)
     set( SOURCES ${SOURCES} ${C_DIR}/utils/filesystem/unix/app_utils.cpp )
 elseif(WIN32)
     set( SOURCES ${SOURCES} ${C_DIR}/utils/filesystem/win/app_utils.cpp )
@@ -46,19 +48,30 @@ target_include_directories( PROJECTX PUBLIC
     "${C_DIR}/include/glm" 
 )
 
-target_link_directories( PROJECTX PUBLIC 
-    "${THIRDPARTY_DIR}/glut/lib" 
-    "${THIRDPARTY_DIR}/glfw/lib" 
-    "${THIRDPARTY_DIR}/glad/lib" 
-    "${THIRDPARTY_DIR}/glew/lib" 
-    "${THIRDPARTY_DIR}/assimp/lib"
-)
-
 FIND_PACKAGE(OpenGL REQUIRED)
 
-if(UNIX)
+if(APPLE)
+
+    target_link_directories( PROJECTX PUBLIC
+        "${THIRDPARTY_DIR}/glfw/lib/mac"
+        "${THIRDPARTY_DIR}/glad/lib/mac"
+        "${THIRDPARTY_DIR}/assimp/lib/mac"
+    )
+    target_link_libraries( PROJECTX "-framework GLUT" "-framework IOKit" "-framework Cocoa" glad glfw3 dl pthread ${OPENGL_gl_LIBRARY} libassimp.so )
+
+elseif(UNIX)
+
+    target_link_directories( PROJECTX PUBLIC 
+        "${THIRDPARTY_DIR}/glut/lib/linux"
+        "${THIRDPARTY_DIR}/glfw/lib/linux"
+        "${THIRDPARTY_DIR}/glad/lib/linux"
+        "${THIRDPARTY_DIR}/glew/lib/linux"
+        "${THIRDPARTY_DIR}/assimp/lib/linux"
+    )
+
     FIND_PACKAGE(X11 REQUIRED)
-    target_link_libraries( PROJECTX glut glfw3 glad dl pthread GLEW.a GL ${OPENGL_gl_LIBRARY} ${X11_X11_LIB} ${X11_Xxf86vm_LIB} ${X11_Xinput_LIB} libassimp.so )
+    target_link_libraries( PROJECTX ${X11_X11_LIB} ${X11_Xxf86vm_LIB} ${X11_Xinput_LIB} )    
+
 elseif(WIN32)
     target_link_libraries( PROJECTX freeglut_static glfw3 glew32.a ${OPENGL_gl_LIBRARY} winmm )
 endif()
