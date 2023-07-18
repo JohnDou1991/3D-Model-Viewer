@@ -1,8 +1,7 @@
-# projectX
-Implement all that is in your mind.
-Hope something great will be in result.
+# 3D Model Renderer
+This application is a product of having a basic course of [LearnOpenGL](https://learnopengl.com/).
 
-Requirements:
+### Requirements
  - CMake 3.12+
 
 Linux:
