@@ -51,11 +51,15 @@ target_include_directories( PROJECTX PUBLIC
 FIND_PACKAGE(OpenGL REQUIRED)
 
 if(APPLE)
-
+    if( ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64" )
+        set(MAC_SUBFOLDER "mac_arm64")
+    else()
+        set(MAC_SUBFOLDER "mac")
+    endif()
     target_link_directories( PROJECTX PUBLIC
-        "${THIRDPARTY_DIR}/glfw/lib/mac"
-        "${THIRDPARTY_DIR}/glad/lib/mac"
-        "${THIRDPARTY_DIR}/assimp/lib/mac"
+        "${THIRDPARTY_DIR}/glfw/lib/${MAC_SUBFOLDER}"
+        "${THIRDPARTY_DIR}/glad/lib/${MAC_SUBFOLDER}"
+        "${THIRDPARTY_DIR}/assimp/lib/${MAC_SUBFOLDER}"
     )
     target_link_libraries( PROJECTX "-framework GLUT" "-framework IOKit" "-framework Cocoa" glad glfw3 dl pthread ${OPENGL_gl_LIBRARY} libassimp.so )
 
