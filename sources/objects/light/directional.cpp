@@ -1,6 +1,6 @@
 #include "directional.hpp"
 
-#include "glm/gtc/type_ptr.hpp"
+#include "gtc/type_ptr.hpp"
 
 namespace object::light
 {

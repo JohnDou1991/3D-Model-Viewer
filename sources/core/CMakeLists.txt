@@ -11,14 +11,10 @@ set( SOURCES
 add_library( CORE ${SOURCES} )
 
 target_include_directories( CORE PUBLIC 
-    # "${THIRDPARTY_DIR}/glut/include" 
-    "${THIRDPARTY_DIR}/glfw/include" 
     "${THIRDPARTY_DIR}/glad/include" 
-    # "${THIRDPARTY_DIR}/glew/include"
-    # "${THIRDPARTY_DIR}/assimp/include"
+    "${THIRDPARTY_DIR}/glfw/include" 
+    "${THIRDPARTY_DIR}/glm" 
 
     "${C_DIR}"
     "${C_DIR}/core"
-    "${C_DIR}/include"
-    "${C_DIR}/include/glm" 
 )

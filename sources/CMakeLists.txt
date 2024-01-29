@@ -36,15 +36,16 @@ add_executable( PROJECTX ${C_DIR}/main.cpp ${SOURCES} )
 # #add_dependencies( PROJECTX GLUT GLFW GLAD GLEW )
 
 target_include_directories( PROJECTX PUBLIC 
-    "${THIRDPARTY_DIR}/glut/include" 
-    "${THIRDPARTY_DIR}/glfw/include" 
+    "${THIRDPARTY_DIR}/assimp/include"
     "${THIRDPARTY_DIR}/glad/include" 
     "${THIRDPARTY_DIR}/glew/include"
-    "${THIRDPARTY_DIR}/assimp/include"
+    "${THIRDPARTY_DIR}/glfw/include" 
+    "${THIRDPARTY_DIR}/glm" 
+    "${THIRDPARTY_DIR}/glm/gtc" 
+    "${THIRDPARTY_DIR}/glut/include"
+    "${THIRDPARTY_DIR}/stb_image/include" 
 
     "${C_DIR}"
-    "${C_DIR}/include"
-    "${C_DIR}/include/glm" 
 )
 
 FIND_PACKAGE(OpenGL REQUIRED)
@@ -81,15 +82,5 @@ endif()
 
 add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-                ${C_DIR}/shaders
-                ${EXECUTABLE_OUTPUT_PATH}/resources/shaders )
-
-add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-                ${C_DIR}/textures
-                ${EXECUTABLE_OUTPUT_PATH}/resources/textures )
-
-add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-                ${C_DIR}/models
-                ${EXECUTABLE_OUTPUT_PATH}/resources/models )
+                ${C_DIR}/resources/
+                ${EXECUTABLE_OUTPUT_PATH}/resources/ )
