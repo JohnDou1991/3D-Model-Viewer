@@ -79,8 +79,3 @@ elseif(UNIX)
 elseif(WIN32)
     target_link_libraries( PROJECTX freeglut_static glfw3 glew32.a ${OPENGL_gl_LIBRARY} winmm )
 endif()
-
-add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-                ${C_DIR}/resources/
-                ${EXECUTABLE_OUTPUT_PATH}/resources/ )
