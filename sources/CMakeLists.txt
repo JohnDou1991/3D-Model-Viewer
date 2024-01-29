@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.12)
 
 set( C_DIR ${CMAKE_CURRENT_LIST_DIR} )
 
+subdirs(${C_DIR}/core)
+
 set( SOURCES 
+    ${C_DIR}/application.cpp 
     ${C_DIR}/main.cpp 
     ${C_DIR}/utils/filesystem/app_utils.cpp
     ${C_DIR}/objects/light/directional.cpp
@@ -11,16 +14,12 @@ set( SOURCES
     ${C_DIR}/objects/light/spot.cpp
     ${C_DIR}/objects/mesh.cpp
     ${C_DIR}/objects/model.cpp
+    ${C_DIR}/objects/object.cpp
     ${C_DIR}/utils/vertices/color.cpp 
-    ${C_DIR}/utils/vertices/normal.cpp 
-    ${C_DIR}/utils/vertices/object.cpp
+    ${C_DIR}/utils/vertices/normal.cpp
     ${C_DIR}/utils/vertices/position.cpp 
     ${C_DIR}/utils/vertices/texture.cpp 
     ${C_DIR}/utils/opengl/gl_utils.cpp 
-    ${C_DIR}/utils/opengl/camera.cpp 
-    ${C_DIR}/utils/opengl/context.cpp 
-    ${C_DIR}/utils/opengl/observers/keyboard.cpp 
-    ${C_DIR}/utils/opengl/observers/mouse.cpp 
     ${C_DIR}/utils/opengl/program.cpp 
     ${C_DIR}/utils/image_loader.cpp 
 )
@@ -34,7 +33,7 @@ elseif(WIN32)
 endif()
 
 add_executable( PROJECTX ${C_DIR}/main.cpp ${SOURCES} )
-#add_dependencies( PROJECTX GLUT GLFW GLAD GLEW )
+# #add_dependencies( PROJECTX GLUT GLFW GLAD GLEW )
 
 target_include_directories( PROJECTX PUBLIC 
     "${THIRDPARTY_DIR}/glut/include" 
@@ -61,7 +60,7 @@ if(APPLE)
         "${THIRDPARTY_DIR}/glad/lib/${MAC_SUBFOLDER}"
         "${THIRDPARTY_DIR}/assimp/lib/${MAC_SUBFOLDER}"
     )
-    target_link_libraries( PROJECTX "-framework GLUT" "-framework IOKit" "-framework Cocoa" glad glfw3 dl pthread ${OPENGL_gl_LIBRARY} libassimp.so )
+    target_link_libraries( PROJECTX "-framework GLUT" "-framework IOKit" "-framework Cocoa" glad glfw3 dl pthread ${OPENGL_gl_LIBRARY} libassimp.so CORE )
 
 elseif(UNIX)
 

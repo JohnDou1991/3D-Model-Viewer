@@ -1,10 +1,10 @@
 #include "program.h"
 
 #include "utils/opengl/gl_utils.h"
-#include "utils/opengl/context.h"
+// #include "utils/opengl/context.h"
 #include "utils/image_loader.h"
 
-#include "utils/vertices/object.h"
+#include "objects/object.hpp"
 
 #include <iostream>
 #include <cmath>
@@ -16,14 +16,19 @@ namespace utils::opengl
 
     }
 
-    Program::Program( Context& context ) : m_context(context)
+    // Program::Program( Context& context ) : m_context(context)
+    // {
+
+    // }
+
+    Program::Program()
     {
 
     }
 
     Program::Program( Program&& rhs )
-        : m_context(rhs.m_context)
-        , m_shader_program( rhs.m_shader_program )
+        // : m_context(rhs.m_context)
+        : m_shader_program( rhs.m_shader_program )
         , m_textures( std::move(rhs.m_textures) )
         , m_objects( std::move(rhs.m_objects) )
         , m_transformationFn( rhs.m_transformationFn )
@@ -41,7 +46,7 @@ namespace utils::opengl
         glDeleteProgram(m_shader_program);
     }
 
-    void Program::LoadShaders( const ShaderList& shaders )
+    void Program::LoadShaders( const Shaders& shaders )
     {
         m_shader_program = utils::LoadShaders(shaders);
     }
@@ -111,7 +116,7 @@ namespace utils::opengl
         glBindVertexArray(0);
     }
 
-    std::vector<float> Program::GetBufferData( const vertice::Object& object ) const
+    std::vector<float> Program::GetBufferData( const object::Object& object ) const
     {
         std::vector<float> result;
         size_t vertex_count = object.vertices.front()->length / object.vertices.front()->width;
@@ -122,7 +127,7 @@ namespace utils::opengl
         return result;
     }
 
-    void Program::LoadObject( const vertice::Object& object )
+    void Program::LoadObject( const object::Object& object )
     {
         m_objects.push_back( { ObjectType::ARRAY, object.vertices.front()->length / object.vertices.front()->width } );
         auto& obj = m_objects.back();
@@ -142,7 +147,7 @@ namespace utils::opengl
         {
             auto& vertice = object.vertices[i];
 
-            glVertexAttribPointer(i, vertice->width, GL_FLOAT, GL_FALSE, object.block_size * sizeof(GLfloat), (GLvoid*)(offset*sizeof(GLfloat)));
+            glVertexAttribPointer(i, vertice->width, GL_FLOAT, GL_FALSE, object.BlockSize() * sizeof(GLfloat), (GLvoid*)(offset*sizeof(GLfloat)));
             glEnableVertexAttribArray(i);
             offset += vertice->width;
         }
@@ -151,7 +156,7 @@ namespace utils::opengl
         glBindVertexArray(0);
     }
 
-    void Program::LoadObject( const vertice::Object& object, const Indices& indices )
+    void Program::LoadObject( const object::Object& object, const Indices& indices )
     {
         m_objects.push_back( { ObjectType::ELEMENT, indices.size / 4 } );
         auto& obj = m_objects.back();
@@ -175,7 +180,7 @@ namespace utils::opengl
         {
             auto& vertice = object.vertices[i];
 
-            glVertexAttribPointer(i, vertice->width, GL_FLOAT, GL_FALSE, object.block_size * sizeof(GLfloat), (GLvoid*)(offset*sizeof(GLfloat)));
+            glVertexAttribPointer(i, vertice->width, GL_FLOAT, GL_FALSE, object.BlockSize() * sizeof(GLfloat), (GLvoid*)(offset*sizeof(GLfloat)));
             glEnableVertexAttribArray(i);
             offset += vertice->width;
         }

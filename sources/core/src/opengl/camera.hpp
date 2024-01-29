@@ -1,16 +1,16 @@
 #pragma once
 
+#include "ICamera.hpp"
+
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
-class GLFWwindow;
-
-namespace utils::opengl
+namespace core::opengl
 {
     class Context;
 
-    class Camera
+    class Camera final : public ICamera
     {
         glm::vec3 position;
         glm::vec3 target;
@@ -42,7 +42,7 @@ namespace utils::opengl
             RIGHT
         };
 
-        void KeyPressedCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        void KeyPressedCallback(int key, int scancode, int action, int mods);
         void Move(EDirection);
 
     public:
@@ -50,8 +50,10 @@ namespace utils::opengl
 
         void Init();
 
-        glm::mat4 LookAt() const;
-        const glm::vec3& Position() const;
-        const glm::vec3& Front() const;
+        glm::mat4 LookAt() const final;
+        const glm::vec3& Position() const final;
+        const glm::vec3& Front() const final;
+
+        ~Camera() = default;
     };
 }

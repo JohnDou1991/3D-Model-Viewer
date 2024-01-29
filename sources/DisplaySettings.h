@@ -1,12 +1,15 @@
+#pragma once
+
 #include <unordered_map>
 
 namespace DisplaySettings
 {
-    enum Mode{
+    enum class Mode{
         SD,
         HD,
-        FullHD
-    } CurrentMode = SD;
+        FHD,
+        UHD
+    };
 
     struct Dimensions
     {
@@ -15,9 +18,10 @@ namespace DisplaySettings
     };
 
     const std::unordered_map<Mode,Dimensions> modes = {
-        { SD,       {800, 600}},
-        { HD,       {1280, 720}},
-        { FullHD,   {1920, 1080}}
+        { Mode::SD,   {800, 600}},
+        { Mode::HD,   {1280, 720}},
+        { Mode::FHD,  {1920, 1080}},
+        { Mode::UHD,  {2560, 1440}}
     };
 
     class Window

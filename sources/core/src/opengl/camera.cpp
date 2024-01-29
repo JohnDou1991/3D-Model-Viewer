@@ -2,13 +2,13 @@
 
 #include "GLFW/glfw3.h"
 
-#include "utils/opengl/context.h"
-#include "utils/opengl/observers/keyboard.hpp"
-#include "utils/opengl/observers/mouse.hpp"
+#include "context.hpp"
+#include "keyboard.hpp"
+#include "mouse.hpp"
 
 #include "utils/std/clamp.h"
 
-namespace utils::opengl
+namespace core::opengl
 {
     Camera::Camera( Context& context, const glm::vec3& target )
         : position( 0, 0, 8 )
@@ -24,15 +24,12 @@ namespace utils::opengl
 
     void Camera::Init()
     {
-        mousePos.lastX = m_context.WindowWidth() / 2;
-        mousePos.lastY = m_context.WindowHeight() / 2;
+        mousePos.lastX = m_context.GetWindow().Width() / 2;
+        mousePos.lastY = m_context.GetWindow().Height() / 2;
 
-        utils::opengl::observer::Mouse::Instance( m_context.Window()).Subscribe(
-            [this]( GLFWwindow* window, double x, double y )
+        m_context.GetWindow().GetMouse().Subscribe(
+            [this]( double x, double y )
             {
-                if ( m_context.Window() != window )
-                    return;
-
                 float offsetX = x - mousePos.lastX;
                 float offsetY = mousePos.lastY - y;
 
@@ -57,13 +54,11 @@ namespace utils::opengl
             }
         );
 
-        utils::opengl::observer::Keyboard::Instance( m_context.Window()).Subscribe(
-            [this]( GLFWwindow* window, int key, int scancode, int action, int mods )
+        m_context.GetWindow().GetKeyboard().Subscribe(
+            [this](int key, int scancode, int action, int mods )
             {
-                if ( m_context.Window() != window )
-                    return;
 
-                KeyPressedCallback( window, key, scancode, action, mods );
+                KeyPressedCallback(key, scancode, action, mods);
             }
         );
     }
@@ -118,7 +113,7 @@ namespace utils::opengl
         }
     }
 
-    void Camera::KeyPressedCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    void Camera::KeyPressedCallback(int key, int scancode, int action, int mods)
     {
         if ( action == GLFW_RELEASE )
             return;
