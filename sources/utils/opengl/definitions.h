@@ -20,7 +20,7 @@ struct Shader{
 
 using Name = std::string;
 using ShaderFileName = std::string;
-using ShaderList = std::unordered_map<ShaderType, std::vector<ShaderFileName>>;
+using Shaders = std::unordered_map<ShaderType, std::vector<ShaderFileName>>;
 
 struct Vertices
 {

@@ -12,14 +12,14 @@ namespace utils
     class Image;
 }
 
-namespace vertice
+namespace object
 {
     class Object;
 }
 
 namespace utils::opengl
 {
-    class Context;
+    // class Context;
 
     class Program
     {
@@ -39,7 +39,7 @@ namespace utils::opengl
             GLuint size;
         };
         
-        Context& m_context;
+        // Context& m_context;
         GLuint   m_shader_program;
 
         std::vector<GLuint> m_textures;
@@ -48,23 +48,24 @@ namespace utils::opengl
         using Transformation = std::function<void(GLuint)>;
         Transformation m_transformationFn;
 
-        std::vector<float> GetBufferData( const vertice::Object& ) const;
+        std::vector<float> GetBufferData( const object::Object& ) const;
 
         std::vector<object::Model> m_models;
 
     public:
-        Program( Context& );
+        // Program( Context& );
+        Program();
         Program( Program&& );
         ~Program();
 
-        void LoadShaders( const ShaderList& );
+        void LoadShaders( const Shaders& );
 
         void LoadObject( const Vertices& );
         void LoadObject( const Vertices&, const Indices& );
 
         void LoadObject2( const Vertices& );
-        void LoadObject( const vertice::Object& );
-        void LoadObject( const vertice::Object&, const Indices& );
+        void LoadObject( const object::Object& );
+        void LoadObject( const object::Object&, const Indices& );
 
         void LoadTexture( const utils::Image& );
         void LoadTransformation( Transformation tFn );
