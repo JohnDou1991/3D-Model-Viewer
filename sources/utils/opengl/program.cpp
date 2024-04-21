@@ -1,7 +1,6 @@
 #include "program.h"
 
 #include "utils/opengl/gl_utils.h"
-// #include "utils/opengl/context.h"
 #include "utils/image_loader.h"
 
 #include "objects/object.hpp"
@@ -16,18 +15,12 @@ namespace utils::opengl
 
     }
 
-    // Program::Program( Context& context ) : m_context(context)
-    // {
-
-    // }
-
     Program::Program()
     {
 
     }
 
     Program::Program( Program&& rhs )
-        // : m_context(rhs.m_context)
         : m_shader_program( rhs.m_shader_program )
         , m_textures( std::move(rhs.m_textures) )
         , m_objects( std::move(rhs.m_objects) )

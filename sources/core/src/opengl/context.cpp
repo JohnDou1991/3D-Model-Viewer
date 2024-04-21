@@ -121,7 +121,10 @@ namespace core::opengl
 
         int nrAttributes;
         glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-        std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
+
+        #ifdef DEBUG_LOGGING
+            std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
+        #endif
 
         glEnable(GL_DEPTH_TEST);
     }

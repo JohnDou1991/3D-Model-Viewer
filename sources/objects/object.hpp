@@ -24,6 +24,7 @@ namespace object
         std::vector<std::unique_ptr<vertice::Vertice>> vertices;
 
         Object( TPosition, TNormal, TTexture );
+        Object(Object&&) = default;
         unsigned BlockSize() const;
         ~Object();
     };
