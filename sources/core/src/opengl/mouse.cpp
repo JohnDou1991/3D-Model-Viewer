@@ -3,6 +3,8 @@
 #include "common.h"
 #include "window.hpp"
 
+#include <iostream>
+
 namespace core::opengl
 {
     void Mouse::MouseMoveCallback(GLFWwindow* window, double xpos, double ypos)
@@ -18,6 +20,7 @@ namespace core::opengl
 
     void Mouse::OnMouseMove(GLFWwindow* window, double xpos, double ypos)
     {
+        std::cout << "x: " << xpos << " y: " << ypos << std::endl;
         for ( auto& callback : m_subscribers )
             callback(xpos, ypos);
     }

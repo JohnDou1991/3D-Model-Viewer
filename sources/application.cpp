@@ -11,7 +11,6 @@
 #include "core/IShaderManager.hpp"
 #include "core/ITextureManager.hpp"
 #include "core/IWindow.hpp"
-#include "utils/opengl/program.h"
 
 #include "gtc/type_ptr.hpp"
 
@@ -64,7 +63,6 @@ Application::~Application()
 void Application::Init()
 {
    stbi_set_flip_vertically_on_load(true);
-   m_scene->AddObject( std::make_unique<assets::Cube>(m_shaderManager, m_textureManager) );
 }
 
 void Application::LoadObjects()
@@ -79,6 +77,8 @@ void Application::LoadObjects()
    textures.emplace_back( utils::ImageLoader().Load( utils::getCurrentDir() + "/resources/textures/container2_specular.png" ) );
 
    m_models.emplace_back(std::move(obj), std::move(textures));
+
+   m_scene->AddObject( std::make_unique<assets::Cube>(m_shaderManager, m_textureManager) );
 }
 
 void Application::LoadLightSources()
@@ -118,6 +118,23 @@ void Application::LoadShaders()
    m_shaders.light[ShaderType::FRAGMENT].push_back("lightSource.fs");
 }
 
+utils::opengl::Program& Application::AddObject(
+   const Shaders& shaders
+ , const object::Object& obj
+ , const Textures& textures )
+{
+   m_programs.emplace_back();
+   utils::opengl::Program& program = m_programs.back();
+
+   program.LoadShaders( shaders );
+   program.LoadObject( obj );
+
+   for ( auto& texture : textures )
+      program.LoadTexture( texture );
+
+   return program;
+}
+
 void Application::Start()
 {
    // scene s1;
@@ -129,26 +146,6 @@ void Application::Start()
    // object::Model m1( utils::getCurrentDir() + "/resources/models/backpack.obj" );
 
    {
-      std::vector<utils::opengl::Program> programs;
-      programs.reserve(32);
-
-      auto addObject = [this, &programs]( 
-         const Shaders& shaders
-       , const object::Object& obj
-       , const Textures& textures ) -> utils::opengl::Program&
-      {
-         programs.emplace_back();
-         utils::opengl::Program& program = programs.back();
-
-         program.LoadShaders( shaders );
-         program.LoadObject( obj );
-
-         for ( auto& texture : textures )
-            program.LoadTexture( texture );
-
-         return program;
-      };
-
       auto sceneTransformation = [this](GLuint program)
       {
          // camera position
@@ -168,8 +165,8 @@ void Application::Start()
       };
 
       // { // object 1
-      //    programs.emplace_back();
-      //    auto& program = programs.back();
+      //    m_programs.emplace_back();
+      //    auto& program = m_programs.back();
 
       //    program.LoadShaders( m_shaders.object );
       //    program.LoadModel( utils::getCurrentDir() + "/resources/models/backpack.obj" );
@@ -192,7 +189,7 @@ void Application::Start()
 
       for ( auto& model : m_models)
       { // object 2
-         auto& program = addObject( m_shaders.object, model.first, model.second );
+         auto& program = AddObject( m_shaders.object, model.first, model.second );
          glm::vec3 position(0,0,0);
          program.LoadTransformation([this, &sceneTransformation, position](GLuint program)
          {
@@ -239,7 +236,7 @@ void Application::Start()
       { // object 3 ( light source )
          for ( auto& source : m_sources )
          {
-            auto& program = addObject( m_shaders.light, m_models.front().first, {} );
+            auto& program = AddObject( m_shaders.light, m_models.front().first, {} );
 
             program.LoadTransformation( [this, &source, &sceneTransformation](GLuint program)
             {
@@ -263,11 +260,11 @@ void Application::Start()
       while ( !m_context->GetWindow().ShouldClose() ) {
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-         // programs.front().Draw2();
-         for ( int i = 0; i < programs.size(); ++i )
-            programs[i].Draw();
+        m_programs.front().Draw2();
+         for ( int i = 0; i < m_programs.size(); ++i )
+            m_programs[i].Draw();
 
-         m_scene->Draw();
+         // m_scene->Draw();
 
          m_context->GetWindow().SwapBuffers();
          m_context->PollEvents();
