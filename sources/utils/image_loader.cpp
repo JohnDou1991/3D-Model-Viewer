@@ -11,7 +11,11 @@ namespace utils
 {
     Image::Image( const std::string& path ) : data(nullptr)
     {
-        data = stbi_load( path.c_str(), &width, &height, &nrChannels, 0);
+        data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+        if (nullptr == data)
+        {
+            throw std::runtime_error("Failed to load texture: " + path);
+        }
         switch ( nrChannels )
         {
             case 1:

@@ -11,3 +11,4 @@ Linux:
  - libxrandr-dev
  - libxinerama-dev
  - libxcursor-dev
+ - libxxf86vm-dev

@@ -6,7 +6,7 @@ set(SOURCES_DIR            "${CMAKE_CURRENT_LIST_DIR}/sources" )
 set(THIRDPARTY_DIR         "${CMAKE_CURRENT_LIST_DIR}/thirdparty" )
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_LIST_DIR}/bin" )
 
-if(APPLE)
+if(APPLE OR UNIX)
     set(CMAKE_CXX_STANDARD 14)
 else()
     set(CMAKE_CXX_STANDARD 11)

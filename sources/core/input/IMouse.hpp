@@ -1,6 +1,9 @@
 #pragma once
 
 #include <functional>
+#include <memory>
+
+struct GLFWwindow;
 
 namespace core
 {
@@ -12,4 +15,6 @@ namespace core
 
         virtual ~IMouse() = default;
     };
+
+    IMouse& CreateMouseHandler(GLFWwindow*);
 }

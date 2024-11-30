@@ -2,8 +2,12 @@
 
 #include "glm.hpp"
 
+#include <memory>
+
 namespace core
 {
+    class IContext;
+
     class ICamera
     {
     public:
@@ -13,4 +17,6 @@ namespace core
 
         virtual ~ICamera() = default;
     };
+
+    std::unique_ptr<ICamera> CreateCamera(IContext&);
 }

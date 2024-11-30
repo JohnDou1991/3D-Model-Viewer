@@ -17,7 +17,7 @@ namespace utils
         return result;
     }
 
-    bool CompileShader( Shader& shader )
+    bool CompileShader( const Shader& shader )
     {
         const GLchar* source = shader.file.c_str();
         glShaderSource(shader.shader, 1, &source, NULL);
@@ -30,7 +30,7 @@ namespace utils
         if(!success)
         {
             glGetShaderInfoLog(shader.shader, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+            std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << "info: " << infoLog << std::endl;
         }
 
         return success;

@@ -1,9 +1,11 @@
 #include "context.hpp"
 
-#include "common.h"
-#include "config.h"
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
+
 #include "utils/std/clamp.h"
-#include "keyboard.hpp"
+
+#include "IKeyboard.hpp"
 
 #include "DisplaySettings.h"
 
@@ -106,11 +108,9 @@ namespace core::opengl
     }
 
     Context::Context() noexcept
-        : m_camera(*this)
-        , m_lastFrame(glfwGetTime())
+        :  m_lastFrame(glfwGetTime())
     {
         InitOpenGL();
-        m_camera.Init();
 
         m_window.GetKeyboard().Subscribe(
             [this](int key, int scancode, int action, int mods)
@@ -132,11 +132,6 @@ namespace core::opengl
     const IWindow& Context::GetWindow() const
     {
         return m_window;
-    }
-
-    const ICamera& Context::GetCamera() const
-    {
-        return m_camera;
     }
 
     float Context::FieldOfView() const

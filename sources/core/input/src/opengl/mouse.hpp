@@ -4,8 +4,6 @@
 
 #include <vector>
 
-struct GLFWwindow;
-
 namespace core::opengl
 {
     class Mouse final : public IMouse
@@ -19,7 +17,6 @@ namespace core::opengl
         void OnMouseMove( GLFWwindow* window, double xpos, double ypos );
 
     public:
-
         static Mouse& Instance(GLFWwindow*);
         void Subscribe(OnMouseMoveCallback) final;
 

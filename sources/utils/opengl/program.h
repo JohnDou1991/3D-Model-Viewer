@@ -37,7 +37,7 @@ namespace utils::opengl
             GLuint size;
         };
 
-        GLuint   m_shader_program;
+        GLuint m_shader_program;
 
         std::vector<GLuint> m_textures;
         std::vector<Object> m_objects;

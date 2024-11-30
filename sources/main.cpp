@@ -6,8 +6,7 @@ int main(int argc, char** argv)
 {
    Application app;
    app.Init();
-   app.LoadShaders();
-   app.LoadObjects();
+   app.LoadScene();
    app.Start();
    return 0;
 }

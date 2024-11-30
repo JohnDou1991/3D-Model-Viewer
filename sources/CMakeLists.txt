@@ -75,7 +75,7 @@ elseif(UNIX)
     )
 
     FIND_PACKAGE(X11 REQUIRED)
-    target_link_libraries( PROJECTX ${X11_X11_LIB} ${X11_Xxf86vm_LIB} ${X11_Xinput_LIB} )    
+    target_link_libraries( PROJECTX ${X11_X11_LIB} ${X11_Xxf86vm_LIB} ${X11_Xinput_LIB} GL dl pthread ${OPENGL_gl_LIBRARY} libassimp.so CORE )
 
 elseif(WIN32)
     target_link_libraries( PROJECTX freeglut_static glfw3 glew32.a ${OPENGL_gl_LIBRARY} winmm )

@@ -20,11 +20,12 @@ namespace utils::opengl
 
     }
 
-    Program::Program( Program&& rhs )
-        : m_shader_program( rhs.m_shader_program )
-        , m_textures( std::move(rhs.m_textures) )
-        , m_objects( std::move(rhs.m_objects) )
-        , m_transformationFn( rhs.m_transformationFn )
+    Program::Program(Program&& rhs)
+        : m_shader_program(rhs.m_shader_program)
+        , m_textures(std::move(rhs.m_textures))
+        , m_objects(std::move(rhs.m_objects))
+        , m_transformationFn(rhs.m_transformationFn)
+        , m_models(std::move(rhs.m_models))
     {
         rhs.m_shader_program = 0;
     }
@@ -239,13 +240,14 @@ namespace utils::opengl
             }
             glBindVertexArray(0);
         }
+
+        for (auto& model : m_models)
+            model.Draw(m_shader_program);
     }
 
     void Program::Draw2()
     {
         glUseProgram(m_shader_program);
         m_transformationFn(m_shader_program);
-        for ( auto& model : m_models )
-            model.Draw( m_shader_program );
     }
 }
