@@ -1,6 +1,6 @@
 #include "keyboard.hpp"
 
-#include "common.h"
+#include "GLFW/glfw3.h"
 
 namespace core::opengl
 {
@@ -29,5 +29,13 @@ namespace core::opengl
     void Keyboard::Subscribe(OnKeyPressCallback callback )
     {
         m_subscribers.push_back(callback);
+    }
+}
+
+namespace core
+{
+    IKeyboard& CreateKeyboardHandler(GLFWwindow* window)
+    {
+        return opengl::Keyboard::Instance(window);
     }
 }

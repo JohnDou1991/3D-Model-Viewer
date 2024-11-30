@@ -19,6 +19,7 @@ namespace utils
 
     bool CompileShader( Shader& shader )
     {
+        std::cout << "Compile shader: " << std::endl;
         const GLchar* source = shader.file.c_str();
         glShaderSource(shader.shader, 1, &source, NULL);
         glCompileShader(shader.shader);
@@ -30,7 +31,7 @@ namespace utils
         if(!success)
         {
             glGetShaderInfoLog(shader.shader, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+            std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << "info: " << infoLog << std::endl;
         }
 
         return success;
@@ -44,6 +45,7 @@ namespace utils
         for ( const auto& pair : list )
             for ( const auto& filename : pair.second )
             {
+                std::cout << "Load shaders: " << dir + filename << std::endl;
                 shaders.emplace_back( ReadShader( (dir + filename).c_str(), pair.first ) );
                 CompileShader( shaders.back() );
             }

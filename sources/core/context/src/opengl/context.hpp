@@ -2,7 +2,6 @@
 
 #include "IContext.hpp"
 
-#include "camera.hpp"
 #include "window.hpp"
 
 class GLFWwindow;
@@ -12,7 +11,6 @@ namespace core::opengl
     class Context final : public IContext
     {
         Window m_window;
-        Camera m_camera;
 
         double m_lastTime;
         bool m_stopTime = false;
@@ -32,7 +30,6 @@ namespace core::opengl
         Context() noexcept;
  
         const IWindow& GetWindow() const final;
-        const ICamera& GetCamera() const final;
 
         float FieldOfView() const final;
 

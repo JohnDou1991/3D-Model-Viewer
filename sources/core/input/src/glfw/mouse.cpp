@@ -1,7 +1,6 @@
 #include "mouse.hpp"
 
-#include "common.h"
-#include "window.hpp"
+#include "GLFW/glfw3.h"
 
 namespace core::opengl
 {
@@ -31,5 +30,13 @@ namespace core::opengl
     void Mouse::Subscribe(OnMouseMoveCallback callback)
     {
         m_subscribers.push_back(callback);
+    }
+}
+
+namespace core
+{
+    IMouse& CreateMouseHandler(GLFWwindow* window)
+    {
+        return opengl::Mouse::Instance(window);
     }
 }

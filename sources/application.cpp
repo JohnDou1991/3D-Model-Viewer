@@ -4,13 +4,13 @@
 
 #include "utils/filesystem/app_utils.hpp"
 
-#include "utils/opengl/definitions.h"
 #include "core/ICamera.hpp"
-#include "core/IContext.hpp"
 #include "core/IScene.hpp"
 #include "core/IShaderManager.hpp"
 #include "core/ITextureManager.hpp"
-#include "core/IWindow.hpp"
+#include "core/context/IContext.hpp"
+#include "core/context/IWindow.hpp"
+#include "utils/opengl/definitions.h"
 #include "utils/opengl/program.h"
 
 #include "gtc/type_ptr.hpp"
@@ -49,6 +49,7 @@ struct LightSource {
 
 Application::Application()
     : m_context( core::CreateContext() )
+    , m_camera( core::CreateCamera(*m_context) )
     , m_scene( core::CreateScene() )
     , m_shaderManager( core::CreateShaderManager() )
     , m_textureManager( core::CreateTextureManager() )
@@ -93,12 +94,12 @@ void Application::LoadLightSources()
    const object::light::Light::Attenuation attenuation{ 1.0f, 0.7f, 1.8f };
 
    m_sources.emplace_back( glm::vec3(1,1,1) );
-   // sources.emplace_back( glm::vec3(1,2,1) );
-   // sources.emplace_back( glm::vec3(1,3,1) );
-   // sources.emplace_back( glm::vec3(1,4,1) );
+   // m_sources.emplace_back( glm::vec3(1,2,1) );
+   // m_sources.emplace_back( glm::vec3(1,3,1) );
+   // m_sources.emplace_back( glm::vec3(1,4,1) );
 
    m_lights.emplace_back( new object::light::Directional(color, attenuation, glm::vec3(3)) );
-   m_lights.emplace_back( new object::light::Spot(color, attenuation, m_context->GetCamera().Position(), m_context->GetCamera().Front(), 12.5f, 17.5f) );
+   m_lights.emplace_back( new object::light::Spot(color, attenuation, m_camera->Position(), m_camera->Front(), 12.5f, 17.5f) );
 
    for ( auto& source : m_sources )
       m_lights.emplace_back( new object::light::Point(color, attenuation, source.current_position) );
@@ -106,6 +107,7 @@ void Application::LoadLightSources()
 
 void Application::LoadScene()
 {
+   LoadShaders();
    LoadObjects();
    LoadLightSources();
 }
@@ -153,7 +155,7 @@ void Application::Start()
       {
          // camera position
          glm::mat4 view = glm::mat4(1);
-         view = m_context->GetCamera().LookAt();
+         view = m_camera->LookAt();
          glUniformMatrix4fv( glGetUniformLocation(program, "view"), 1, GL_FALSE, glm::value_ptr(view) );
 
          // projection
@@ -164,7 +166,7 @@ void Application::Start()
          for ( auto& light : m_lights )
             light->Process(program);
 
-         glUniform3fv( glGetUniformLocation(program, "viewPos"), 1, glm::value_ptr( m_context->GetCamera().Position() ) );
+         glUniform3fv( glGetUniformLocation(program, "viewPos"), 1, glm::value_ptr( m_camera->Position() ) );
       };
 
       // { // object 1

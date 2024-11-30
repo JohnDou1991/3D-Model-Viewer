@@ -6,6 +6,7 @@
 
 namespace core
 {
+    class ICamera;
     class IContext;
     class IScene;
     class IShaderManager;
@@ -33,7 +34,6 @@ class IApplication
 public:
     virtual void Init() = 0;
     virtual void LoadScene() = 0;
-    virtual void LoadShaders() = 0;
     virtual void Start() = 0;
 
     virtual ~IApplication() = default;
@@ -43,15 +43,18 @@ class Application : public IApplication
 {
 public:
     Application();
+
     void Init() override;
-    void LoadLightSources();
-    void LoadObjects();
     void LoadScene() override;
-    void LoadShaders() override;
     void Start() override;
+
     ~Application();
 
 private:
+    void LoadLightSources();
+    void LoadObjects();
+    void LoadShaders();
+
     struct
     {
         Shaders object;
@@ -59,6 +62,7 @@ private:
     } m_shaders;
 
     std::unique_ptr<core::IContext> m_context;
+    std::unique_ptr<core::ICamera> m_camera;
     std::unique_ptr<core::IScene> m_scene;
     std::unique_ptr<core::IShaderManager> m_shaderManager;
     std::unique_ptr<core::ITextureManager> m_textureManager;

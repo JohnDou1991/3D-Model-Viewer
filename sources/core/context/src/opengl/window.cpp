@@ -1,8 +1,8 @@
 #include "window.hpp"
 
-#include "common.h"
-#include "keyboard.hpp"
-#include "mouse.hpp"
+#include "GLFW/glfw3.h"
+#include "IKeyboard.hpp"
+#include "IMouse.hpp"
 
 #include <iostream>
 
@@ -31,8 +31,8 @@ namespace core::opengl
 
         if ( m_window )
         {
-            m_keyboard = &Keyboard::Instance(m_window);
-            m_mouse = &Mouse::Instance(m_window);
+            m_keyboard = &CreateKeyboardHandler(m_window);
+            m_mouse = &CreateMouseHandler(m_window);
         }
         else
             throw("Failed to init window");
