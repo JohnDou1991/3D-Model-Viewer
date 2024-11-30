@@ -10,7 +10,6 @@ namespace core
     class IContext
     {
     public:
-        virtual const ICamera& GetCamera() const = 0;
         virtual const IWindow& GetWindow() const = 0;
 
         virtual float FieldOfView() const = 0;

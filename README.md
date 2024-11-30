@@ -10,5 +10,6 @@ Linux:
  - libxrandr-dev
  - libxinerama-dev
  - libxcursor-dev
+ - libxxf86vm-dev
 
 https://github.com/JohnDou1991/projectX/assets/29564070/31fee250-f917-4fc0-8bff-396da5c5f71f
