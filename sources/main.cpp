@@ -136,7 +136,7 @@ int main(int argc, char** argv)
       program.LoadTransformation( [&sceneTransformation](GLuint program)
       {
          glm::mat4 model = glm::mat4(1);
-         // model = glm::rotate(model, (float)glfwGetTime()/2 + glm::radians(45.0f), glm::vec3( 0.0, 0.0, 20.0 ));
+         model = glm::rotate(model, (float)glfwGetTime()/2 + glm::radians(45.0f), glm::vec3( 0.0, 20.0, 0.0 ));
          model = glm::translate( model, glm::vec3(0,0,0) );
          glUniformMatrix4fv( glGetUniformLocation(program, "model"), 1, GL_FALSE, glm::value_ptr(model) );
 
@@ -183,9 +183,10 @@ int main(int argc, char** argv)
             program.LoadTransformation( [&source, &sceneTransformation, &context](GLuint program)
             {
                glm::mat4 model = glm::mat4(1);
-               model = glm::rotate(model, -(float)glfwGetTime()/2 + glm::radians(0.0f), glm::vec3( 5.0, 80.0, 40.0 ));
+               model = glm::rotate(model, -(float)glfwGetTime()/2 + glm::radians(0.0f), glm::vec3( 0.0, 20.0, 0.0 ));
                glm::vec3 pos = source.origin_position;
-               model = glm::translate( model, pos += sin(glfwGetTime()) );
+               // model = glm::translate( model, pos += sin(glfwGetTime()) );
+               model = glm::translate( model, pos = glm::vec3(2.0, 0.0, 0.0) );
 
                source.current_position = model * glm::vec4(pos, 0.0);
 
