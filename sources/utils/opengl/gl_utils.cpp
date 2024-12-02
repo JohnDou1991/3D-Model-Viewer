@@ -36,7 +36,7 @@ namespace utils
         return success;
     }
 
-    GLuint LoadShaders( const ShaderList& list )
+    GLuint LoadShaders( const Shaders& list )
     {
         std::string dir = utils::getCurrentDir() + "/resources/shaders/";
         std::vector<Shader> shaders;

@@ -6,5 +6,5 @@ namespace utils
 {
     Shader ReadShader( const std::string& path, GLenum type );
     bool CompileShader( Shader& shader );
-    GLuint LoadShaders( const ShaderList& );
+    GLuint LoadShaders( const Shaders& );
 }
