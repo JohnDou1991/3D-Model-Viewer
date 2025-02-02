@@ -2,7 +2,6 @@
 
 #include "common.h"
 #include "config.h"
-#include "utils/std/clamp.h"
 #include "keyboard.hpp"
 
 #include "DisplaySettings.h"

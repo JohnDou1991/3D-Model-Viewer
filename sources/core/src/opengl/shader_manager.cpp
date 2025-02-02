@@ -12,8 +12,7 @@ namespace core::opengl
         if (it != m_shaders.end())
             return it->second;
 
-        const auto path = utils::getCurrentDir() + "/resources/shaders/" + filename;
-        const auto pair = m_shaders.emplace(filename, std::make_shared<IShader>(TShaderType(path)) );
+        const auto pair = m_shaders.emplace(filename, std::make_shared<IShader>(TShaderType(filename)) );
 
         return pair.first->second;
     }

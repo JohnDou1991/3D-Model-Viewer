@@ -16,7 +16,8 @@ namespace core::opengl
             windowSettings.width()
           , windowSettings.height()
           , "LearnOpenGL"
-          , glfwGetPrimaryMonitor()
+        //   , glfwGetPrimaryMonitor()
+          , NULL
           , NULL
         );
 

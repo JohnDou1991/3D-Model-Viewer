@@ -10,7 +10,7 @@ namespace core::opengl
 {
     class Scene final : public IScene
     {
-        std::vector<Object> m_objects;
+        std::vector<std::unique_ptr<IObject>> m_objects;
     public:
 
         void AddTerrain() override;

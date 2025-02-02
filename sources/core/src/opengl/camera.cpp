@@ -6,8 +6,6 @@
 #include "keyboard.hpp"
 #include "mouse.hpp"
 
-#include "utils/std/clamp.h"
-
 namespace core::opengl
 {
     Camera::Camera( Context& context, const glm::vec3& target )
@@ -57,7 +55,6 @@ namespace core::opengl
         m_context.GetWindow().GetKeyboard().Subscribe(
             [this](int key, int scancode, int action, int mods )
             {
-
                 KeyPressedCallback(key, scancode, action, mods);
             }
         );
