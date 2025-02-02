@@ -11,7 +11,7 @@ namespace core::opengl
 
     void Scene::AddObject( std::unique_ptr<IObject> object )
     {
-
+        m_objects.push_back(std::move(object));
     }
 
     void Scene::AddLight()
@@ -26,7 +26,8 @@ namespace core::opengl
 
     void Scene::Draw()
     {
-
+        for (auto& object : m_objects)
+            object->Draw();
     }
 }
 

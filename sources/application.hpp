@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils/opengl/definitions.h"
+#include "utils/opengl/program.h"
 
 #include <memory>
 
@@ -71,4 +72,8 @@ private:
     Lights m_lights;
 
     std::vector<LightSource> m_sources;
+
+    utils::opengl::Program& AddObject(const Shaders&, const object::Object&, const Textures&);
+
+    std::vector<utils::opengl::Program> m_programs;
 };
