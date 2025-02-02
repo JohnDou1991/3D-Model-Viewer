@@ -3,6 +3,7 @@
 #include "IObject.hpp"
 
 #include <vector>
+#include <memory>
 
 namespace core
 {

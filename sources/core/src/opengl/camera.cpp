@@ -2,15 +2,15 @@
 
 #include "GLFW/glfw3.h"
 
-#include "context.hpp"
-#include "keyboard.hpp"
-#include "mouse.hpp"
+#include "IContext.hpp"
+#include "ICamera.hpp"
+#include "IWindow.hpp"
 
 #include "utils/std/clamp.h"
 
 namespace core::opengl
 {
-    Camera::Camera( Context& context, const glm::vec3& target )
+    Camera::Camera( IContext& context, const glm::vec3& target )
         : position( 0, 0, 8 )
         , target(target)
         , direction( glm::normalize( position - target ) )
@@ -19,7 +19,7 @@ namespace core::opengl
         , front( glm::vec3( 0, 0, -1 ))
         , m_context(context)
     {
-
+        Init();
     }
 
     void Camera::Init()
@@ -143,5 +143,13 @@ namespace core::opengl
             default:
                 break;
         }
+    }
+}
+
+namespace core
+{
+    std::unique_ptr<ICamera> CreateCamera(IContext& context)
+    {
+        return std::make_unique<opengl::Camera>(context);
     }
 }

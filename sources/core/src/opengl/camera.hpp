@@ -6,10 +6,12 @@
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
-namespace core::opengl
+namespace core
 {
-    class Context;
+class IContext;
 
+namespace opengl
+{
     class Camera final : public ICamera
     {
         glm::vec3 position;
@@ -19,7 +21,7 @@ namespace core::opengl
         glm::vec3 up;
         glm::vec3 front;
 
-        Context& m_context;
+        IContext& m_context;
 
         const float SPEED = 1.0f;
 
@@ -44,11 +46,10 @@ namespace core::opengl
 
         void KeyPressedCallback(int key, int scancode, int action, int mods);
         void Move(EDirection);
+        void Init();
 
     public:
-        Camera( Context&, const glm::vec3& target = glm::vec3( 0,0,0 ) );
-
-        void Init();
+        Camera( IContext&, const glm::vec3& target = glm::vec3( 0,0,0 ) );
 
         glm::mat4 LookAt() const final;
         const glm::vec3& Position() const final;
@@ -56,4 +57,6 @@ namespace core::opengl
 
         ~Camera() = default;
     };
-}
+
+} // namespace opengl
+} // namespace core
