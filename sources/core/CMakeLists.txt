@@ -5,6 +5,12 @@ set( SOURCES
    ${CMAKE_CURRENT_LIST_DIR}/src/opengl/context.cpp 
    ${CMAKE_CURRENT_LIST_DIR}/src/opengl/keyboard.cpp 
    ${CMAKE_CURRENT_LIST_DIR}/src/opengl/mouse.cpp 
+   ${CMAKE_CURRENT_LIST_DIR}/src/opengl/object.cpp 
+   ${CMAKE_CURRENT_LIST_DIR}/src/opengl/scene.cpp 
+   ${CMAKE_CURRENT_LIST_DIR}/src/opengl/shader_base.cpp 
+   ${CMAKE_CURRENT_LIST_DIR}/src/opengl/shader_manager.cpp 
+   ${CMAKE_CURRENT_LIST_DIR}/src/opengl/texture.cpp 
+   ${CMAKE_CURRENT_LIST_DIR}/src/opengl/texture_manager.cpp 
    ${CMAKE_CURRENT_LIST_DIR}/src/opengl/window.cpp 
 )
 

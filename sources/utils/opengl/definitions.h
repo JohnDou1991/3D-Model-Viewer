@@ -15,7 +15,6 @@ enum ShaderType
 struct Shader{
     GLuint shader;
     std::string file;
-    const GLchar ** source;
 };
 
 using Name = std::string;

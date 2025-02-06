@@ -19,8 +19,6 @@ namespace object
 
 namespace utils::opengl
 {
-    // class Context;
-
     class Program
     {
         enum ObjectType
@@ -38,8 +36,7 @@ namespace utils::opengl
             GLuint vao = 0;
             GLuint size;
         };
-        
-        // Context& m_context;
+
         GLuint   m_shader_program;
 
         std::vector<GLuint> m_textures;
@@ -53,7 +50,6 @@ namespace utils::opengl
         std::vector<object::Model> m_models;
 
     public:
-        // Program( Context& );
         Program();
         Program( Program&& );
         ~Program();

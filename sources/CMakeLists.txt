@@ -7,6 +7,7 @@ subdirs(${C_DIR}/core)
 set( SOURCES 
     ${C_DIR}/application.cpp 
     ${C_DIR}/main.cpp 
+    ${C_DIR}/assets/cube.cpp  
     ${C_DIR}/utils/filesystem/app_utils.cpp
     ${C_DIR}/objects/light/directional.cpp
     ${C_DIR}/objects/light/light.cpp
